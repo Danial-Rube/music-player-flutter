@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:test_app/login_singup.dart';
+import 'package:test_app/verifytool.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,6 +14,7 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _nameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _repassController = TextEditingController();
   bool _obscureText = true;
 
   @override
@@ -26,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //back ground settings
       backgroundColor: const Color(0xFF000000), // رنگ بکگراند
       body: SafeArea(
         child: Center(
@@ -139,6 +142,47 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
+                SizedBox(height: 15.0),
+
+                //فیلد کنترل دوباره پسورد
+                SizedBox(
+                  width: 300,
+                  child: TextField(
+                    controller: _repassController,
+
+                    obscureText: _obscureText,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: 'Confirm Password',
+                      /*prefixIcon: const Icon(
+                        Icons.key,
+                        color: Color(0xFF4F4F4F),
+                      ),*/
+                      hintStyle: TextStyle(color: Color(0xFF4F4F4F)),
+                      filled: true,
+                      fillColor: Color(0xFF282828),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          color: Color(0xFF0069D2),
+                          _obscureText
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                    ),
+                  ),
+                ),
+
                 //sing in dutton
                 const SizedBox(height: 30),
                 SizedBox(
@@ -152,11 +196,28 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
+                    // اکشن دکمه ی ثبت نام
                     onPressed: () {
                       debugPrint('email ${_emailController.text}');
                       debugPrint('name : ${_nameController.text}');
                       debugPrint(' password : ${_passwordController.text}');
+                      debugPrint(' password : ${_repassController.text}');
+
+                      bool vrifyed = ValidationHelper.verify(
+                        context,
+                        _emailController.text,
+                        _nameController.text,
+                        _passwordController.text,
+                        _repassController.text,
+                      );
+
+                      if (vrifyed) {
+                        debugPrint("verifyed");
+                      } else {
+                        debugPrint("not verifyed!");
+                      }
                     },
+
                     child: const Text(
                       'Sing-up',
                       style: TextStyle(
@@ -168,6 +229,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
+
+                //متن زیر دکمه ی ثبت نام
                 const SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
