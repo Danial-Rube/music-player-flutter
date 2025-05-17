@@ -44,7 +44,7 @@ class ValidationHelper {
           message,
           style: TextStyle(
             fontSize: 16,
-            color: Colors.white,
+            color: Color(0xFFBCBCBC),
             fontFamily: 'Opensans',
           ),
         ),
@@ -52,8 +52,8 @@ class ValidationHelper {
         duration: Duration(seconds: 3),
         margin: EdgeInsets.only(
           bottom: 20.0, // فاصله از پایین
-          left: 10.0, // فاصله از چپ
-          right: 10.0, // فاصله از راست
+          left: 15.0, // فاصله از چپ
+          right: 15.0, // فاصله از راست
         ),
         padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         shape: RoundedRectangleBorder(

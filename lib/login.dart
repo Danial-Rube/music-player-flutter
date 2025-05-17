@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:test_app/home.dart';
 import 'package:test_app/login_singup.dart';
 import 'package:test_app/verifytool.dart';
 
@@ -36,9 +37,11 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
+                //فیلد ایمیل
                 SizedBox(
                   width: 300,
                   child: TextField(
+                    cursorColor: Color(0xFF004B95),
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     inputFormatters: [
@@ -72,6 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   width: 300,
                   child: TextField(
+                    cursorColor: Color(0xFF004B95),
                     controller: _nameController,
                     keyboardType: TextInputType.emailAddress,
                     inputFormatters: [
@@ -103,6 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   width: 300,
                   child: TextField(
+                    cursorColor: Color(0xFF004B95),
                     controller: _passwordController,
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
@@ -148,6 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   width: 300,
                   child: TextField(
+                    cursorColor: Color(0xFF004B95),
                     controller: _repassController,
 
                     obscureText: _obscureText,
@@ -263,6 +269,79 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ],
+            ),
+          ),
+        ),
+      ),
+
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: SizedBox(
+          height: 80, // ارتفاع نوار ناوبری
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(22),
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                // حذف انیمیشن‌های کلیک
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+              ),
+              child: BottomNavigationBar(
+                //رنگ امیزی ایکون ها
+                backgroundColor: Color(0xFF1A1A1A),
+                selectedItemColor: Color(0xFF004B95),
+                unselectedItemColor: Color(0xFF4F4F4F),
+
+                // تنظیم ایندکس فعال به 1 (تب شاپ)
+                currentIndex: 1,
+                onTap: (index) {
+                  // برررسی صفحه
+                  if (index != 1) {
+                    // اگر تب فعلی (شاپ) کلیک نشده باشد
+                    // انتقال به صفحه مربوطه
+                    switch (index) {
+                      case 0:
+                        // انتقال به صفحه خانه
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                        );
+                        debugPrint('go home');
+                        break;
+                      case 1:
+                        // این مورد در حالت عادی اجرا نمی‌شود چون ما در حال حاضر در تب شاپ هستیم
+                        break;
+                    }
+                  }
+                  // اگر ایندکس یکسان باشد، هیچ کاری انجام نمی‌شود
+                },
+                // حذف سایه
+                elevation: 0,
+                // جلوگیری از انیمیشن shift
+                type: BottomNavigationBarType.fixed,
+
+                // تنظیم اندازه آیکون‌ها و فاصله از متن
+                selectedIconTheme: IconThemeData(size: 28),
+                unselectedIconTheme: IconThemeData(size: 26),
+                selectedLabelStyle: TextStyle(
+                  fontSize: 13,
+                  fontFamily: 'Opensans',
+                ),
+                unselectedLabelStyle: TextStyle(
+                  fontSize: 12,
+                  fontFamily: 'Opensans',
+                ),
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.shopping_basket),
+                    label: 'Shop',
+                  ),
+                ],
+              ),
             ),
           ),
         ),
