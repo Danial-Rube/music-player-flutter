@@ -96,7 +96,12 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               // نوار جستجو
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.only(
+                  top: 16,
+                  left: 16,
+                  right: 16,
+                  bottom: 5,
+                ),
                 child: Container(
                   // تنظیمات ظاهری نوار جستجو
                   height: 60,

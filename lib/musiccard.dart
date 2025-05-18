@@ -69,7 +69,7 @@ class _MusicCardState extends State<MusicCard> {
             child: Image.asset(
               widget._coverPath,
               height: 170,
-              width: 150.0,
+              width: double.infinity,
               fit: BoxFit.cover,
             ),
           ),
