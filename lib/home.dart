@@ -90,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       //رنگ پس زمینه
       backgroundColor: Color(0xFF0F0F0F),
+
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -174,8 +175,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   child: TextButton(
                     onPressed: () {
-                      // عملیات مورد نظر هنگام کلیک
+                      //  عملیات کلیک روی عنوان لوکال
                       debugPrint('Local Songs button pressed');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => MusicPageList(
+                                title: 'Local Songs',
+                                songs: songs,
+                              ),
+                        ),
+                      );
                     },
                     style: ButtonStyle(
                       padding: WidgetStateProperty.all(EdgeInsets.zero),
@@ -206,7 +217,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: TextButton(
                     onPressed: () {
                       // عملیات مورد نظر هنگام کلیک
-                      debugPrint('Local Songs button pressed');
+                      debugPrint('Downlods button pressed');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => MusicPageList(
+                                title: 'Downlodas',
+                                songs: songs,
+                              ),
+                        ),
+                      );
                     },
                     style: ButtonStyle(
                       padding: WidgetStateProperty.all(EdgeInsets.zero),

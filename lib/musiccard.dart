@@ -15,6 +15,7 @@ const TextStyle _artistStyle = TextStyle(
   fontFamily: 'Opensans',
 );
 
+//کلاس اصلی موزیک کارت
 class MusicCard extends StatefulWidget {
   final String _title;
   final String _artist;
@@ -133,6 +134,7 @@ class _MusicCardState extends State<MusicCard> {
   }
 }
 
+// موزیک لیست مولد افقی
 Widget musicList(List<Song> songs) {
   return ListView.builder(
     padding: EdgeInsets.only(top: 0, left: 8.0, right: 8.0, bottom: 0.0),
@@ -142,4 +144,133 @@ Widget musicList(List<Song> songs) {
       return MusicCard(song: songs[index]);
     },
   );
+}
+
+// صفحه ی موزیک لیست
+class MusicPageList extends StatefulWidget {
+  final String title;
+  final List<Song> songs;
+
+  //باید بهش یک عنوان و یک لیست از اهنگ ها پاس داده بشه!
+  const MusicPageList({super.key, required this.title, required this.songs});
+
+  @override
+  State<MusicPageList> createState() => _MusicPageListState();
+}
+
+class _MusicPageListState extends State<MusicPageList> {
+  bool isSorted = false;
+  late List<Song> displayedSongs;
+
+  @override
+  void initState() {
+    super.initState();
+    // مقداردهی اولیه لیست نمایش داده شده
+    displayedSongs = List.from(widget.songs);
+  }
+
+  // تابع مرتب سازی
+  void _sortSongs() {
+    setState(() {
+      if (isSorted) {
+        // بازگشت به ترتیب اصلی
+        displayedSongs = List.from(widget.songs);
+      } else {
+        // مرتب سازی بر اساس عنوان
+        displayedSongs.sort((a, b) => a.title.compareTo(b.title));
+      }
+      isSorted = !isSorted;
+    });
+  }
+
+  // تابع انتخاب تصادفی
+  void _shuffleSongs() {
+    setState(() {
+      displayedSongs = List.from(widget.songs);
+      displayedSongs.shuffle();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFF0F0F0F),
+      appBar: AppBar(
+        toolbarHeight: 60,
+        backgroundColor: Color(0xFF1A1A1A),
+        elevation: 0,
+
+        title: Text(
+          widget.title,
+          style: TextStyle(
+            color: Color(0xFFD7D7D7),
+            fontSize: 15,
+            fontFamily: 'Opensans',
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.keyboard_arrow_left_rounded, color: Colors.white70),
+        ),
+        actions: [
+          TextButton.icon(
+            onPressed: _sortSongs,
+            icon: Icon(
+              isSorted ? Icons.sort : Icons.sort_by_alpha,
+              color: Color(0xFF004B95),
+            ),
+            label: Text(
+              'Sort',
+              style: TextStyle(color: Colors.white, fontFamily: 'Opensans'),
+            ),
+          ),
+          TextButton.icon(
+            onPressed: _shuffleSongs,
+            icon: Icon(Icons.shuffle, color: Color(0xFF004B95)),
+            label: Text(
+              'Shuffle',
+              style: TextStyle(color: Colors.white, fontFamily: 'Opensans'),
+            ),
+          ),
+          SizedBox(width: 10),
+        ],
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.builder(
+            padding: EdgeInsets.only(top: 8, bottom: 8),
+            itemCount: (displayedSongs.length + 1) ~/ 2, // تعداد ردیف‌ها
+            itemBuilder: (context, rowIndex) {
+              // ساخت یک ردیف با یک یا دو کارت
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: Row(
+                  children: [
+                    // کارت اول در ردیف
+                    Expanded(
+                      child: MusicCard(song: displayedSongs[rowIndex * 2]),
+                    ),
+
+                    // کارت دوم در ردیف (اگر وجود داشته باشد)
+                    if (rowIndex * 2 + 1 < displayedSongs.length)
+                      Expanded(
+                        child: MusicCard(
+                          song: displayedSongs[rowIndex * 2 + 1],
+                        ),
+                      )
+                    else
+                      Expanded(
+                        child: SizedBox(),
+                      ), // فضای خالی اگر کارت دوم وجود نداشته باشد
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
 }
