@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: const Color(0xFF0F0F0F),
       ),
+      debugShowCheckedModeBanner: false, // حذف نشان DEBUG
       initialRoute: '/',
       routes: {
         '/': (context) => const CategoriesPage(),
@@ -40,6 +41,7 @@ class CategoriesPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Category', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF0F0F0F),
+        centerTitle: true,
       ),
       backgroundColor: const Color(0xFF0F0F0F),
       body: ListView.builder(
@@ -52,7 +54,11 @@ class CategoriesPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               child: InkWell(
                 onTap: () {
-                  // بعداً به صفحه‌ی Shop هدایت شود
+                  Navigator.pushNamed(
+                    context,
+                    '/details',
+                    arguments: categories[index],
+                  );
                 },
                 child: Stack(
                   alignment: Alignment.center,
@@ -80,21 +86,6 @@ class CategoriesPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Text(
-                      categories[index].name,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        shadows: [
-                          Shadow(
-                            blurRadius: 10,
-                            color: Colors.black,
-                            offset: Offset(2, 2),
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -117,40 +108,35 @@ class CategoryDetailsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(category.name, style: const TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF0F0F0F),
+        centerTitle: true,
       ),
       backgroundColor: const Color(0xFF0F0F0F),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.asset(
-                  category.imagePath,
-                  width: double.infinity,
-                  height: 300,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
+        child: Container(
+          color: const Color(0xFF0F0F0F),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset(
+                    category.imagePath,
+                    width: double.infinity,
                     height: 300,
-                    color: Colors.grey[800],
-                    child: const Icon(Icons.broken_image, size: 50, color: Colors.white),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        Colors.black.withOpacity(0.7),
-                        Colors.transparent,
-                      ],
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      height: 300,
+                      color: Colors.grey[800],
+                      child: const Icon(Icons.broken_image, size: 50, color: Colors.white),
                     ),
                   ),
-                ),
-              ],
+                  Container(
+                    color: const Color(0xFF0F0F0F),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
