@@ -101,8 +101,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   top: 16,
                   left: 16,
                   right: 16,
-                  bottom: 5,
+                  bottom: 1.0,
                 ),
+
                 child: Container(
                   // تنظیمات ظاهری نوار جستجو
                   height: 60,
@@ -110,58 +111,79 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Color(0xFF1A1A1A), //رنگ داخل نوار
                     borderRadius: BorderRadius.circular(22),
                   ),
-                  // استفاده از Row برای قرار دادن آیکون و TextField کنار هم
-                  child: Row(
-                    children: [
-                      // آیکون جستجو
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 5,
-                        ),
+                  child: TextField(
+                    controller: _searchController,
+                    cursorColor: Color(0xFF004B95),
+                    style: const TextStyle(color: Colors.white), //رنگ متن جستجو
+                    textAlignVertical:
+                        TextAlignVertical.center, // تنظیم عمودی متن در مرکز
+                    onChanged: (value) {
+                      // به‌روزرسانی UI برای نمایش یا مخفی کردن دکمه ضربدر
+                      setState(() {});
+                    },
+                    decoration: InputDecoration(
+                      // آیکون جستجو در سمت چپ
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: IconButton(
-                          icon: const Icon(
-                            Icons.search_rounded,
-                            color: Color(0xFF004B95),
-                          ),
                           onPressed: () {
-                            debugPrint(
-                              'searched for: ${_searchController.text}',
+                            List<Song> searchedSong = [];
+                            for (Song s in songs) {
+                              if (s.title.contains(_searchController.text)) {
+                                searchedSong.add(s);
+                              }
+                            }
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => MusicPageList(
+                                      title: _searchController.text,
+                                      songs: searchedSong,
+                                    ),
+                              ),
                             );
                           },
-                          // اندازه آیکون
-                          iconSize: 24,
-                        ),
-                      ),
-
-                      // فیلد متن جستجو
-                      Expanded(
-                        child: TextField(
-                          controller: _searchController,
-                          cursorColor: Color(0xFF004B95),
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ), //رنگ متن جستجو
-                          textAlignVertical:
-                              TextAlignVertical
-                                  .center, // تنظیم عمودی متن در مرکز
-
-                          decoration: InputDecoration(
-                            hintText: 'Search Songs..',
-                            hintStyle: TextStyle(
-                              color: Color(0xFF4F4F4F),
-                              fontFamily: 'Opensans',
-                              fontWeight: FontWeight.w200,
-                            ),
-                            border: InputBorder.none, //تنظیم حاشیه نوار
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              //   تنظیم عمودی متن
-                            ),
+                          icon: Icon(
+                            Icons.search_rounded,
+                            color: Color(0xFF004B95),
+                            size: 25,
                           ),
                         ),
                       ),
-                    ],
+                      // آیکون ضربدر در سمت راست - فقط زمانی که متنی وجود دارد
+                      suffixIcon:
+                          _searchController.text.isNotEmpty
+                              ? IconButton(
+                                icon: Icon(
+                                  Icons.close,
+                                  color: Color(0xFF004B95),
+                                  size: 20,
+                                ),
+                                onPressed: () {
+                                  // پاک کردن متن
+                                  _searchController.clear();
+                                  // به‌روزرسانی UI
+                                  setState(() {});
+                                },
+                              )
+                              : null,
+
+                      hintText: 'Search Songs..',
+                      hintStyle: TextStyle(
+                        color: Color(0xFF4F4F4F),
+                        fontFamily: 'Opensans',
+                        fontWeight: FontWeight.w200,
+                      ),
+
+                      border: InputBorder.none,
+                      //تنظیم حاشیه نوار
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 0,
+                      ),
+                    ),
                   ),
                 ),
               ),

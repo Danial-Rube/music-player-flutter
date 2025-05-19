@@ -239,36 +239,52 @@ class _MusicPageListState extends State<MusicPageList> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            padding: EdgeInsets.only(top: 8, bottom: 8),
-            itemCount: (displayedSongs.length + 1) ~/ 2, // تعداد ردیف‌ها
-            itemBuilder: (context, rowIndex) {
-              // ساخت یک ردیف با یک یا دو کارت
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: Row(
-                  children: [
-                    // کارت اول در ردیف
-                    Expanded(
-                      child: MusicCard(song: displayedSongs[rowIndex * 2]),
+          child:
+              displayedSongs.isEmpty
+                  ? Center(
+                    child: Text(
+                      "No Songs Found! 😢",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 67, 67, 67),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Opensans',
+                      ),
                     ),
+                  )
+                  : ListView.builder(
+                    padding: EdgeInsets.only(top: 8, bottom: 8),
+                    itemCount:
+                        (displayedSongs.length + 1) ~/ 2, // تعداد ردیف‌ها
+                    itemBuilder: (context, rowIndex) {
+                      // ساخت یک ردیف با یک یا دو کارت
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: Row(
+                          children: [
+                            // کارت اول در ردیف
+                            Expanded(
+                              child: MusicCard(
+                                song: displayedSongs[rowIndex * 2],
+                              ),
+                            ),
 
-                    // کارت دوم در ردیف (اگر وجود داشته باشد)
-                    if (rowIndex * 2 + 1 < displayedSongs.length)
-                      Expanded(
-                        child: MusicCard(
-                          song: displayedSongs[rowIndex * 2 + 1],
+                            // کارت دوم در ردیف (اگر وجود داشته باشد)
+                            if (rowIndex * 2 + 1 < displayedSongs.length)
+                              Expanded(
+                                child: MusicCard(
+                                  song: displayedSongs[rowIndex * 2 + 1],
+                                ),
+                              )
+                            else
+                              Expanded(
+                                child: SizedBox(),
+                              ), // فضای خالی اگر کارت دوم وجود نداشته باشد
+                          ],
                         ),
-                      )
-                    else
-                      Expanded(
-                        child: SizedBox(),
-                      ), // فضای خالی اگر کارت دوم وجود نداشته باشد
-                  ],
-                ),
-              );
-            },
-          ),
+                      );
+                    },
+                  ),
         ),
       ),
     );
