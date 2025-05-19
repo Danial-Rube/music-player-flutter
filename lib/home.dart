@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               // نوار جستجو
-              Padding(
+              /*Padding(
                 padding: const EdgeInsets.only(
                   top: 16,
                   left: 16,
@@ -127,23 +127,27 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: IconButton(
                           onPressed: () {
-                            List<Song> searchedSong = [];
-                            for (Song s in songs) {
-                              if (s.title.contains(_searchController.text)) {
-                                searchedSong.add(s);
+                            if (_searchController.text.isNotEmpty) {
+                              List<Song> searchedSong = [];
+                              for (Song s in songs) {
+                                if (s.title.toLowerCase().contains(
+                                  _searchController.text.toLowerCase(),
+                                )) {
+                                  searchedSong.add(s);
+                                }
                               }
+                              //مولد صفحه ی سرچ
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => MusicPageList(
+                                        title: _searchController.text,
+                                        songs: searchedSong,
+                                      ),
+                                ),
+                              );
                             }
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => MusicPageList(
-                                      title: _searchController.text,
-                                      songs: searchedSong,
-                                    ),
-                              ),
-                            );
                           },
                           icon: Icon(
                             Icons.search_rounded,
@@ -186,6 +190,30 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
+              ),*/
+              SearchBar(
+                controller: _searchController,
+                onSearch: (sdfsdf) {
+                  List<Song> searchedSong = [];
+                  for (Song s in songs) {
+                    if (s.title.toLowerCase().contains(
+                      _searchController.text.toLowerCase(),
+                    )) {
+                      searchedSong.add(s);
+                    }
+                  }
+                  // مولد صفحه‌ی سرچ
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => MusicPageList(
+                            title: _searchController.text,
+                            songs: searchedSong,
+                          ),
+                    ),
+                  );
+                },
               ),
 
               // محتوای اصلی صفحه
@@ -272,6 +300,89 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // نوار ناوبری پایین صفحه با تغییرات
       bottomNavigationBar: navigationControler(context, _currentIndex),
+    );
+  }
+}
+
+class SearchBar extends StatelessWidget {
+  final TextEditingController controller;
+  final String hintText;
+  final Function(String) onSearch; // تابع جستجو که به عنوان ورودی دریافت می‌شود
+
+  const SearchBar({
+    super.key,
+    required this.controller,
+    required this.onSearch,
+    this.hintText = 'Search Songs..',
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 5),
+      child: Container(
+        height: 60,
+        decoration: BoxDecoration(
+          color: Color(0xFF1A1A1A),
+          borderRadius: BorderRadius.circular(22),
+        ),
+        child: TextField(
+          controller: controller,
+          cursorColor: Color(0xFF004B95),
+          style: const TextStyle(color: Colors.white),
+          textAlignVertical: TextAlignVertical.center,
+          onChanged: (value) {
+            // به‌روزرسانی UI برای نمایش یا مخفی کردن دکمه ضربدر
+            (context as Element).markNeedsBuild();
+          },
+          decoration: InputDecoration(
+            // آیکون جستجو در سمت چپ
+            prefixIcon: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: IconButton(
+                onPressed: () {
+                  if (controller.text.isNotEmpty) {
+                    onSearch(controller.text);
+                  }
+                },
+                icon: Icon(
+                  Icons.search_rounded,
+                  color: Color(0xFF004B95),
+                  size: 25,
+                ),
+              ),
+            ),
+            // آیکون ضربدر در سمت راست - فقط زمانی که متنی وجود دارد
+            suffixIcon:
+                controller.text.isNotEmpty
+                    ? IconButton(
+                      icon: Icon(
+                        Icons.close,
+                        color: Color(0xFF004B95),
+                        size: 20,
+                      ),
+                      onPressed: () {
+                        // پاک کردن متن
+                        controller.clear();
+                        // به‌روزرسانی UI
+                        (context as Element).markNeedsBuild();
+                      },
+                    )
+                    : null,
+            hintText: hintText,
+            hintStyle: TextStyle(
+              color: Color(0xFF4F4F4F),
+              fontFamily: 'Opensans',
+              fontWeight: FontWeight.w200,
+            ),
+            border: InputBorder.none,
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 0,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

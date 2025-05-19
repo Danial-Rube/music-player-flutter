@@ -236,22 +236,13 @@ class _MusicPageListState extends State<MusicPageList> {
           SizedBox(width: 10),
         ],
       ),
+      //بدنه ی اصلی صفحه
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child:
               displayedSongs.isEmpty
-                  ? Center(
-                    child: Text(
-                      "No Songs Found! 😢",
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 67, 67, 67),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'Opensans',
-                      ),
-                    ),
-                  )
+                  ? notFoundMusicMessage()
                   : ListView.builder(
                     padding: EdgeInsets.only(top: 8, bottom: 8),
                     itemCount:
@@ -289,4 +280,26 @@ class _MusicPageListState extends State<MusicPageList> {
       ),
     );
   }
+}
+
+Widget notFoundMusicMessage() {
+  return Center(
+    child: Column(
+      children: [
+        SizedBox(height: 50),
+
+        Image.asset('assets/images/sademoji.png', width: 200),
+
+        Text(
+          "No Songs Found!",
+          style: TextStyle(
+            color: Color.fromARGB(255, 67, 67, 67),
+            fontSize: 18,
+            fontWeight: FontWeight.w400,
+            fontFamily: 'Opensans',
+          ),
+        ),
+      ],
+    ),
+  );
 }
