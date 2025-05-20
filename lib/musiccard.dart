@@ -195,8 +195,9 @@ class _MusicPageListState extends State<MusicPageList> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF0F0F0F),
+
       appBar: AppBar(
-        toolbarHeight: 60,
+        toolbarHeight: 70,
         backgroundColor: Color(0xFF1A1A1A),
         elevation: 0,
 
@@ -302,4 +303,217 @@ Widget notFoundMusicMessage() {
       ],
     ),
   );
+}
+
+//صفحه ی پخش موزیک
+class MusicPlayPage extends StatefulWidget {
+  Song song;
+
+  MusicPlayPage({super.key, required this.song});
+
+  @override
+  State<MusicPlayPage> createState() => _MusicPlayPageState();
+}
+
+class _MusicPlayPageState extends State<MusicPlayPage> {
+  bool isPlaying = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFF0F0F0F),
+
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white70),
+        ),
+      ),
+
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: SizedBox(
+            // استفاده از width: double.infinity برای گسترش محتوا در کل عرض صفحه
+            width: double.infinity,
+            child: Column(
+              // تنظیم همترازی افقی به وسط
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // فضای خالی از بالا - این مقدار را می‌توانید تغییر دهید
+                SizedBox(height: 60),
+
+                // کاور آهنگ - مرکزی
+                Container(
+                  width: 280,
+                  height: 280,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.8),
+                        blurRadius: 15,
+                        offset: Offset(0, 10),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(26),
+                    child: Image.asset(
+                      widget.song.coverPath,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 40),
+
+                // نام آهنگ
+                Text(
+                  widget.song.title,
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 24,
+                    fontFamily: 'Opensans',
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+
+                SizedBox(height: 8),
+
+                // نام هنرمند
+                Text(
+                  widget.song.artist,
+                  style: TextStyle(
+                    color: Colors.grey[400],
+                    fontSize: 16,
+                    fontFamily: 'Opensans',
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+
+                // اینجا می‌توانید بقیه المان‌ها را اضافه کنید
+                SizedBox(height: 50),
+
+                // نوار پیشرفت
+                Container(
+                  width: 280, // عرض کانتینر مطابق با عرض کاور آهنگ
+                  padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF1A1A1A),
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: SliderTheme(
+                    data: SliderThemeData(
+                      trackHeight: 4,
+                      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6),
+                      overlayShape: RoundSliderOverlayShape(overlayRadius: 14),
+                      activeTrackColor: Color(0xFF004B95),
+                      inactiveTrackColor: Colors.grey[800],
+                      thumbColor: Colors.white,
+                      overlayColor: Color(0xFF004B95).withOpacity(0.3),
+                    ),
+                    child: Slider(
+                      value: 0.5, // مقدار پیش‌فرض
+                      onChanged: (value) {
+                        // کد تغییر موقعیت
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(height: 5),
+
+                // نمایش زمان - هم‌عرض با کانتینر نوار پیشرفت
+                SizedBox(
+                  width: 280, // عرض یکسان با کانتینر نوار پیشرفت
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "1:30", // زمان فعلی
+                          style: TextStyle(
+                            color: Colors.grey[400],
+                            fontSize: 12,
+                            fontFamily: 'Opensans',
+                          ),
+                        ),
+                        Text(
+                          "3:00", // زمان کل
+                          style: TextStyle(
+                            color: Colors.grey[400],
+                            fontSize: 12,
+                            fontFamily: 'Opensans',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30),
+
+                // دکمه‌های کنترل پخش
+                SizedBox(
+                  height: 80,
+
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // دکمه عقب
+                      IconButton(
+                        icon: Icon(
+                          Icons.skip_previous_rounded,
+                          color: Colors.white,
+                          size: 32,
+                        ),
+                        onPressed: () {},
+                      ),
+
+                      // دکمه پخش/توقف
+                      Container(
+                        width: 64,
+                        height: 64,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF1A1A1A),
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          icon: Icon(
+                            isPlaying
+                                ? Icons.play_arrow_rounded
+                                : Icons.pause_rounded,
+                            color: Colors.white,
+                            size: 40,
+                          ),
+                          onPressed: () {
+                            isPlaying = !isPlaying;
+                            setState(() {});
+                          },
+                        ),
+                      ),
+
+                      // دکمه جلو
+                      IconButton(
+                        icon: Icon(
+                          Icons.skip_next_rounded,
+                          color: Colors.white,
+                          size: 32,
+                        ),
+
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
