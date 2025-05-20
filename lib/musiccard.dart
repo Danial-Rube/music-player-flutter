@@ -16,15 +16,11 @@ const TextStyle _artistStyle = TextStyle(
 );
 
 //کلاس اصلی موزیک کارت
+//کلاس اصلی موزیک کارت
 class MusicCard extends StatefulWidget {
-  final String _title;
-  final String _artist;
-  final String _coverPath;
+  final Song song;
 
-  MusicCard({super.key, required Song song})
-    : _title = song.title,
-      _artist = song.artist,
-      _coverPath = song.coverPath;
+  const MusicCard({super.key, required this.song});
 
   @override
   State<MusicCard> createState() => _MusicCardState();
@@ -62,16 +58,29 @@ class _MusicCardState extends State<MusicCard> {
       child: Column(
         children: [
           // بخش تصویر کاور
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-            child: Image.asset(
-              widget._coverPath,
-              height: 170,
-              width: double.infinity,
-              fit: BoxFit.cover,
+          InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () {
+              // باز کردن صفحه پخش آهنگ
+              debugPrint("Music selected: ${widget.song.title}");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MusicPlayPage(song: widget.song),
+                ),
+              );
+            },
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+              child: Image.asset(
+                widget.song.coverPath,
+                height: 170,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
 
@@ -95,14 +104,14 @@ class _MusicCardState extends State<MusicCard> {
                         children: [
                           // عنوان آهنگ
                           Text(
-                            widget._title,
+                            widget.song.title,
                             style: _titleStyle,
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 2), // فاصله بین دو متن
                           // نام خواننده
                           Text(
-                            widget._artist,
+                            widget.song.artist,
                             style: _artistStyle,
                             overflow: TextOverflow.ellipsis,
                           ),
