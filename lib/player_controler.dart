@@ -1,3 +1,6 @@
+//import 'dart:nativewrappers/_internal/vm/lib/typed_data_patch.dart';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -9,8 +12,8 @@ List<Song> localSongs = [];
 
 class MusicPlayerManager {
   // الگوی سینگلتون
-  static final MusicPlayerManager _instance = MusicPlayerManager._internal();
-  factory MusicPlayerManager() => _instance;
+  static final MusicPlayerManager instance = MusicPlayerManager._internal();
+  factory MusicPlayerManager() => instance;
   MusicPlayerManager._internal();
 
   // پلیر صوتی
@@ -51,7 +54,7 @@ class MusicPlayerManager {
       );
 
       // تبدیل مدل‌های آهنگ به کلاس Song ما
-      localSongs =
+      /*localSongs =
           deviceSongs.map((song) {
             return Song(
               id: "#local${song.id.toString()}",
@@ -61,7 +64,25 @@ class MusicPlayerManager {
               duration: Duration(milliseconds: song.duration ?? 0),
               coverPath: 'assets/images/see.jpg', // کاور پیش‌فرض
             );
-          }).toList();
+          }).toList();*/
+      for (var song in deviceSongs) {
+        final Uint8List? artwork = await audioQuery.queryArtwork(
+          song.id,
+          ArtworkType.AUDIO,
+        );
+
+        localSongs.add(
+          Song(
+            id: "#local${song.id.toString()}",
+            title: song.title,
+            artist: song.artist ?? 'Unknown Artist',
+            filePath: song.uri ?? '',
+            duration: Duration(milliseconds: song.duration ?? 0),
+            coverPath: 'assets/images/see.jpg',
+            artwork: artwork,
+          ),
+        );
+      }
 
       return localSongs;
     } catch (e) {

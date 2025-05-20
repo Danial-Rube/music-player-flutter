@@ -1,4 +1,6 @@
 // مدل داده ساده برای آهنگ
+import 'package:flutter/foundation.dart';
+
 class Song {
   final String id;
   final String title;
@@ -7,6 +9,7 @@ class Song {
   final Duration? duration;
   final String? genre;
   final String coverPath;
+  final Uint8List? artwork;
 
   Song({
     required this.id,
@@ -15,6 +18,7 @@ class Song {
     required this.filePath,
     this.duration,
     this.genre,
+    this.artwork,
     String? coverPath,
   }) : coverPath = coverPath ?? "dsds ";
 }

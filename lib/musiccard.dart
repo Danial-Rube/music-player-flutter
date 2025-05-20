@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_app/player_controler.dart';
 import 'package:test_app/song.dart';
 
 const TextStyle _titleStyle = TextStyle(
@@ -75,12 +76,20 @@ class _MusicCardState extends State<MusicCard> {
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
               ),
-              child: Image.asset(
-                widget.song.coverPath,
-                height: 170,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+              child:
+                  widget.song.artwork != null
+                      ? Image.memory(
+                        widget.song.artwork!,
+                        width: double.infinity,
+                        height: 170,
+                        fit: BoxFit.cover,
+                      )
+                      : Image.asset(
+                        widget.song.coverPath,
+                        height: 170,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
             ),
           ),
 
@@ -122,7 +131,9 @@ class _MusicCardState extends State<MusicCard> {
 
                   // دکمه پخش در سمت راست
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      MusicPlayerManager.instance.playOrPauseMusic(widget.song);
+                    },
 
                     icon: const Icon(
                       Icons.play_circle_fill_rounded,
