@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:test_app/musiccard.dart';
 import 'package:test_app/navigation.dart';
 import 'package:test_app/song.dart';
+import 'package:test_app/player_controler.dart';
 
 const Text _localTitle = Text(
   'Local Songs',
@@ -32,6 +33,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final int _currentIndex = 0; // برای پیگیری تب فعال
+  bool _isLoading = true;
   final TextEditingController _searchController = TextEditingController();
 
   final List<Song> songs = [
@@ -80,6 +82,37 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    // فراخوانی متد بارگذاری آهنگ‌ها در زمان شروع
+    _loadDeviceSongs();
+  }
+
+  // متد جدید برای بارگذاری آهنگ‌های گوشی
+  Future<void> _loadDeviceSongs() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // استفاده از MusicPlayerManager برای بارگذاری آهنگ‌ها
+      await MusicPlayerManager.loadDeviceMusic();
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      // نمایش تعداد آهنگ‌های یافت شده در کنسول
+      debugPrint('Found ${localSongs.length} songs on device');
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      debugPrint('Error loading songs: $e');
+    }
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
@@ -95,102 +128,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // نوار جستجو
-              /*Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
-                  left: 16,
-                  right: 16,
-                  bottom: 1.0,
-                ),
-
-                child: Container(
-                  // تنظیمات ظاهری نوار جستجو
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: Color(0xFF1A1A1A), //رنگ داخل نوار
-                    borderRadius: BorderRadius.circular(22),
-                  ),
-                  child: TextField(
-                    controller: _searchController,
-                    cursorColor: Color(0xFF004B95),
-                    style: const TextStyle(color: Colors.white), //رنگ متن جستجو
-                    textAlignVertical:
-                        TextAlignVertical.center, // تنظیم عمودی متن در مرکز
-                    onChanged: (value) {
-                      // به‌روزرسانی UI برای نمایش یا مخفی کردن دکمه ضربدر
-                      setState(() {});
-                    },
-                    decoration: InputDecoration(
-                      // آیکون جستجو در سمت چپ
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: IconButton(
-                          onPressed: () {
-                            if (_searchController.text.isNotEmpty) {
-                              List<Song> searchedSong = [];
-                              for (Song s in songs) {
-                                if (s.title.toLowerCase().contains(
-                                  _searchController.text.toLowerCase(),
-                                )) {
-                                  searchedSong.add(s);
-                                }
-                              }
-                              //مولد صفحه ی سرچ
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => MusicPageList(
-                                        title: _searchController.text,
-                                        songs: searchedSong,
-                                      ),
-                                ),
-                              );
-                            }
-                          },
-                          icon: Icon(
-                            Icons.search_rounded,
-                            color: Color(0xFF004B95),
-                            size: 25,
-                          ),
-                        ),
-                      ),
-                      // آیکون ضربدر در سمت راست - فقط زمانی که متنی وجود دارد
-                      suffixIcon:
-                          _searchController.text.isNotEmpty
-                              ? IconButton(
-                                icon: Icon(
-                                  Icons.close,
-                                  color: Color(0xFF004B95),
-                                  size: 20,
-                                ),
-                                onPressed: () {
-                                  // پاک کردن متن
-                                  _searchController.clear();
-                                  // به‌روزرسانی UI
-                                  setState(() {});
-                                },
-                              )
-                              : null,
-
-                      hintText: 'Search Songs..',
-                      hintStyle: TextStyle(
-                        color: Color(0xFF4F4F4F),
-                        fontFamily: 'Opensans',
-                        fontWeight: FontWeight.w200,
-                      ),
-
-                      border: InputBorder.none,
-                      //تنظیم حاشیه نوار
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 0,
-                      ),
-                    ),
-                  ),
-                ),
-              ),*/
               SearchBar(
                 controller: _searchController,
                 onSearch: (sdfsdf) {
@@ -233,7 +170,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder:
                               (context) => MusicPageList(
                                 title: 'Local Songs',
-                                songs: songs,
+                                //بررسی خالی یا پر بودن لیست اهنگ های دریافت شده از گوشی
+                                songs: localSongs.isEmpty ? songs : localSongs,
                               ),
                         ),
                       );
@@ -246,6 +184,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
+
+              if (localSongs.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: IconButton(
+                    onPressed:
+                        _isLoading
+                            ? null
+                            : _loadDeviceSongs, // غیرفعال کردن دکمه هنگام بارگذاری
+                    icon: Icon(
+                      Icons.refresh_rounded,
+                      color:
+                          _isLoading
+                              ? Color(0xFF4F4F4F)
+                              : Color(0xFFD7D7D7), // تغییر رنگ هنگام بارگذاری
+                    ),
+                    tooltip: 'Refresh songs',
+                  ),
+                ),
 
               // لیست اهنگ های محلی
               SizedBox(
