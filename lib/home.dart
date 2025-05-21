@@ -132,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 controller: _searchController,
                 onSearch: (sdfsdf) {
                   List<Song> searchedSong = [];
-                  for (Song s in songs) {
+                  for (Song s in localSongs) {
                     if (s.title.toLowerCase().contains(
                       _searchController.text.toLowerCase(),
                     )) {

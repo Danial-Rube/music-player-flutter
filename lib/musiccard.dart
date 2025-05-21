@@ -366,18 +366,19 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
   late StreamSubscription _durationSubscription;
   late StreamSubscription _playerStateSubscription;
 
+  // متغیر برای ذخیره آهنگ فعلی
+  late Song _currentSong;
+
   @override
   void initState() {
     super.initState();
-    // شروع به پخش آهنگ در زمان ورود به صفحه
+    _currentSong = widget.song;
     _initPlayerAndListeners();
   }
 
   void _initPlayerAndListeners() {
     // گوش دادن به تغییرات زمان فعلی پخش
-    _positionSubscription = _playerManager.audioPlayer.positionStream.listen((
-      position,
-    ) {
+    _positionSubscription = _playerManager.positionStream.listen((position) {
       if (mounted) {
         setState(() {
           _position = position;
@@ -397,24 +398,43 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
     });
 
     // گوش دادن به تغییرات وضعیت پخش
-    _playerStateSubscription = _playerManager.audioPlayer.playerStateStream
-        .listen((state) {
-          if (mounted) {
-            setState(() {
-              isPlaying = state.playing;
-            });
-          }
+    _playerStateSubscription = _playerManager.playerStateStream.listen((state) {
+      if (mounted) {
+        setState(() {
+          isPlaying = state.playing;
         });
+      }
+    });
 
     // شروع به پخش آهنگ
     _playThisSong();
   }
 
   void _playThisSong() async {
-    await _playerManager.playOrPauseMusic(widget.song);
+    await _playerManager.playOrPauseMusic(_currentSong);
     setState(() {
       isPlaying = true;
     });
+  }
+
+  void _playNextSong() async {
+    await _playerManager.playNextSong();
+    // آپدیت کردن آهنگ فعلی پس از تغییر
+    if (_playerManager.currentSong != null) {
+      setState(() {
+        _currentSong = _playerManager.currentSong!;
+      });
+    }
+  }
+
+  void _playPreviousSong() async {
+    await _playerManager.playPreviousSong();
+    // آپدیت کردن آهنگ فعلی پس از تغییر
+    if (_playerManager.currentSong != null) {
+      setState(() {
+        _currentSong = _playerManager.currentSong!;
+      });
+    }
   }
 
   // تبدیل مدت زمان به فرمت نمایشی
@@ -476,15 +496,15 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(26),
                     child:
-                        widget.song.artwork != null
+                        _currentSong.artwork != null
                             ? Image.memory(
-                              widget.song.artwork!,
+                              _currentSong.artwork!,
                               width: double.infinity,
                               height: 170,
                               fit: BoxFit.cover,
                             )
                             : Image.asset(
-                              widget.song.coverPath,
+                              _currentSong.coverPath,
                               height: 170,
                               width: double.infinity,
                               fit: BoxFit.cover,
@@ -496,7 +516,7 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
 
                 // نام آهنگ
                 Text(
-                  widget.song.title,
+                  _currentSong.title,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -510,7 +530,7 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
 
                 // نام هنرمند
                 Text(
-                  widget.song.artist,
+                  _currentSong.artist,
                   style: TextStyle(
                     color: Colors.grey[400],
                     fontSize: 16,
@@ -521,14 +541,10 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
 
                 SizedBox(height: 50),
 
-                // نوار پیشرفت با مقدار واقعی
+                // نوار پیشرفت بدون کادر
                 Container(
                   width: 280,
                   padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF1A1A1A),
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
                   child: SliderTheme(
                     data: SliderThemeData(
                       trackHeight: 4,
@@ -553,7 +569,7 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                       ),
                       onChanged: (value) {
                         final newPosition = Duration(seconds: value.toInt());
-                        _playerManager.audioPlayer.seek(newPosition);
+                        _playerManager.seekTo(newPosition);
                       },
                     ),
                   ),
@@ -603,9 +619,7 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                           color: Colors.white,
                           size: 32,
                         ),
-                        onPressed: () {
-                          // عملکرد دکمه عقب (می‌توانید اضافه کنید)
-                        },
+                        onPressed: _playPreviousSong,
                       ),
 
                       // دکمه پخش/توقف با وضعیت واقعی
@@ -625,7 +639,7 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                             size: 40,
                           ),
                           onPressed: () {
-                            _playerManager.playOrPauseMusic(widget.song);
+                            _playerManager.playOrPauseMusic(_currentSong);
                           },
                         ),
                       ),
@@ -637,9 +651,7 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                           color: Colors.white,
                           size: 32,
                         ),
-                        onPressed: () {
-                          // عملکرد دکمه جلو (می‌توانید اضافه کنید)
-                        },
+                        onPressed: _playNextSong,
                       ),
                     ],
                   ),

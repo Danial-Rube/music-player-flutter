@@ -19,9 +19,6 @@ class MusicPlayerManager {
   // پلیر صوتی
   final AudioPlayer _audioPlayer = AudioPlayer();
 
-  // برای دسترسی به فایل‌های صوتی گوشی
-  //final OnAudioQuery _audioQuery = OnAudioQuery();
-
   // متغیرهای مدیریت وضعیت
   Song? _currentSong;
 
@@ -58,18 +55,6 @@ class MusicPlayerManager {
         ignoreCase: true,
       );
 
-      // تبدیل مدل‌های آهنگ به کلاس Song ما
-      /*localSongs =
-          deviceSongs.map((song) {
-            return Song(
-              id: "#local${song.id.toString()}",
-              title: song.title,
-              artist: song.artist ?? 'Unknown Artist',
-              filePath: song.uri ?? '',
-              duration: Duration(milliseconds: song.duration ?? 0),
-              coverPath: 'assets/images/see.jpg', // کاور پیش‌فرض
-            );
-          }).toList();*/
       for (var song in deviceSongs) {
         final Uint8List? artwork = await audioQuery.queryArtwork(
           song.id,
