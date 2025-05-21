@@ -122,6 +122,16 @@ class MusicPlayerManager {
     }
   }
 
+  Future<void> stopPlaying() async {
+    try {
+      if (_currentSong != null && _audioPlayer.playing) {
+        await _audioPlayer.stop();
+      }
+    } catch (e) {
+      debugPrint('Errore in Stoping Song: $e');
+    }
+  }
+
   // متد برای پخش آهنگ بعدی
   Future<void> playNextSong() async {
     if (_currentSong == null || localSongs.isEmpty) {

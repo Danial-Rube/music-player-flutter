@@ -30,11 +30,11 @@ class MusicCard extends StatefulWidget {
 class _MusicCardState extends State<MusicCard> {
   bool isPlaying = false;
 
-  void _changePlayStatus() {
+  /* void _changePlayStatus() {
     setState(() {
       //isPlaying = !isPlaying;
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +64,15 @@ class _MusicCardState extends State<MusicCard> {
             onTap: () {
               // باز کردن صفحه پخش آهنگ
               debugPrint("Music selected: ${widget.song.title}");
+              if (isPlaying) {
+                setState(() {
+                  isPlaying = false;
+                });
+              }
+
+              MusicPlayerManager.instance.stopPlaying();
+              MusicPlayerManager.instance.playOrPauseMusic(widget.song);
+
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -392,10 +401,20 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(26),
-                    child: Image.asset(
-                      widget.song.coverPath,
-                      fit: BoxFit.cover,
-                    ),
+                    child:
+                        widget.song.artwork != null
+                            ? Image.memory(
+                              widget.song.artwork!,
+                              width: double.infinity,
+                              height: 170,
+                              fit: BoxFit.cover,
+                            )
+                            : Image.asset(
+                              widget.song.coverPath,
+                              height: 170,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
                   ),
                 ),
 
@@ -405,7 +424,7 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                 Text(
                   widget.song.title,
                   style: TextStyle(
-                    color: Colors.white70,
+                    color: Colors.white,
                     fontSize: 24,
                     fontFamily: 'Opensans',
                     fontWeight: FontWeight.bold,
@@ -426,7 +445,6 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                   textAlign: TextAlign.center,
                 ),
 
-                // اینجا می‌توانید بقیه المان‌ها را اضافه کنید
                 SizedBox(height: 50),
 
                 // نوار پیشرفت
@@ -455,7 +473,7 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 5),
+                SizedBox(height: 2),
 
                 // نمایش زمان - هم‌عرض با کانتینر نوار پیشرفت
                 SizedBox(
@@ -485,7 +503,7 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 10),
 
                 // دکمه‌های کنترل پخش
                 SizedBox(
@@ -515,14 +533,18 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                         child: IconButton(
                           icon: Icon(
                             isPlaying
-                                ? Icons.play_arrow_rounded
-                                : Icons.pause_rounded,
+                                ? Icons.pause_rounded
+                                : Icons.play_arrow_rounded,
                             color: Colors.white,
                             size: 40,
                           ),
                           onPressed: () {
-                            isPlaying = !isPlaying;
-                            setState(() {});
+                            setState(() {
+                              isPlaying = !isPlaying;
+                            });
+                            MusicPlayerManager.instance.playOrPauseMusic(
+                              widget.song,
+                            );
                           },
                         ),
                       ),
