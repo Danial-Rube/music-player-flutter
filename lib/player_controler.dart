@@ -28,9 +28,10 @@ class MusicPlayerManager {
   // گترها برای دسترسی به وضعیت فعلی
   Song? get currentSong => _currentSong;
   bool get isPlaying => _audioPlayer.playing;
+  AudioPlayer get audioPlayer => _audioPlayer;
 
   bool isPlayingthis(Song song) {
-    return _currentSong?.id == song.id && _audioPlayer.playing;
+    return _currentSong?.id == song.id && isPlaying;
   }
 
   // متد برای درخواست مجوز دسترسی به فایل‌های صوتی

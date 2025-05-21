@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:test_app/player_controler.dart';
 import 'package:test_app/song.dart';
@@ -30,12 +32,6 @@ class MusicCard extends StatefulWidget {
 class _MusicCardState extends State<MusicCard> {
   bool isPlaying = false;
 
-  /* void _changePlayStatus() {
-    setState(() {
-      //isPlaying = !isPlaying;
-    });
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -64,14 +60,13 @@ class _MusicCardState extends State<MusicCard> {
             onTap: () {
               // باز کردن صفحه پخش آهنگ
               debugPrint("Music selected: ${widget.song.title}");
-              if (isPlaying) {
+              if (!isPlaying) {
                 setState(() {
-                  isPlaying = false;
+                  isPlaying = true;
                 });
               }
 
               MusicPlayerManager.instance.stopPlaying();
-              MusicPlayerManager.instance.playOrPauseMusic(widget.song);
 
               Navigator.push(
                 context,
@@ -149,7 +144,10 @@ class _MusicCardState extends State<MusicCard> {
                     },
 
                     icon:
-                        isPlaying
+                        isPlaying ||
+                                MusicPlayerManager.instance.isPlayingthis(
+                                  widget.song,
+                                )
                             ? const Icon(
                               Icons.pause_circle_filled_rounded,
                               color: Color(0xFFDADADA),
@@ -356,7 +354,85 @@ class MusicPlayPage extends StatefulWidget {
 }
 
 class _MusicPlayPageState extends State<MusicPlayPage> {
-  bool isPlaying = true;
+  final MusicPlayerManager _playerManager = MusicPlayerManager.instance;
+  bool isPlaying = false;
+
+  // متغیرهای کنترل زمان و پیشرفت
+  Duration _duration = Duration.zero;
+  Duration _position = Duration.zero;
+
+  // برای مدیریت اشتراک‌های Stream
+  late StreamSubscription _positionSubscription;
+  late StreamSubscription _durationSubscription;
+  late StreamSubscription _playerStateSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    // شروع به پخش آهنگ در زمان ورود به صفحه
+    _initPlayerAndListeners();
+  }
+
+  void _initPlayerAndListeners() {
+    // گوش دادن به تغییرات زمان فعلی پخش
+    _positionSubscription = _playerManager.audioPlayer.positionStream.listen((
+      position,
+    ) {
+      if (mounted) {
+        setState(() {
+          _position = position;
+        });
+      }
+    });
+
+    // گوش دادن به تغییرات زمان کل آهنگ
+    _durationSubscription = _playerManager.audioPlayer.durationStream.listen((
+      duration,
+    ) {
+      if (mounted && duration != null) {
+        setState(() {
+          _duration = duration;
+        });
+      }
+    });
+
+    // گوش دادن به تغییرات وضعیت پخش
+    _playerStateSubscription = _playerManager.audioPlayer.playerStateStream
+        .listen((state) {
+          if (mounted) {
+            setState(() {
+              isPlaying = state.playing;
+            });
+          }
+        });
+
+    // شروع به پخش آهنگ
+    _playThisSong();
+  }
+
+  void _playThisSong() async {
+    await _playerManager.playOrPauseMusic(widget.song);
+    setState(() {
+      isPlaying = true;
+    });
+  }
+
+  // تبدیل مدت زمان به فرمت نمایشی
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  @override
+  void dispose() {
+    // لغو اشتراک‌های Stream برای جلوگیری از نشت حافظه
+    _positionSubscription.cancel();
+    _durationSubscription.cancel();
+    _playerStateSubscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -376,13 +452,11 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: SizedBox(
-            // استفاده از width: double.infinity برای گسترش محتوا در کل عرض صفحه
             width: double.infinity,
             child: Column(
-              // تنظیم همترازی افقی به وسط
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // فضای خالی از بالا - این مقدار را می‌توانید تغییر دهید
+                // فضای خالی از بالا
                 SizedBox(height: 60),
 
                 // کاور آهنگ - مرکزی
@@ -447,9 +521,9 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
 
                 SizedBox(height: 50),
 
-                // نوار پیشرفت
+                // نوار پیشرفت با مقدار واقعی
                 Container(
-                  width: 280, // عرض کانتینر مطابق با عرض کاور آهنگ
+                  width: 280,
                   padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
                   decoration: BoxDecoration(
                     color: Color(0xFF1A1A1A),
@@ -466,25 +540,36 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                       overlayColor: Color(0xFF004B95).withOpacity(0.3),
                     ),
                     child: Slider(
-                      value: 0.5, // مقدار پیش‌فرض
+                      min: 0.0,
+                      max:
+                          _duration.inSeconds.toDouble() > 0.0
+                              ? _duration.inSeconds.toDouble()
+                              : 1.0,
+                      value: _position.inSeconds.toDouble().clamp(
+                        0.0,
+                        _duration.inSeconds.toDouble() > 0.0
+                            ? _duration.inSeconds.toDouble()
+                            : 1.0,
+                      ),
                       onChanged: (value) {
-                        // کد تغییر موقعیت
+                        final newPosition = Duration(seconds: value.toInt());
+                        _playerManager.audioPlayer.seek(newPosition);
                       },
                     ),
                   ),
                 ),
                 SizedBox(height: 2),
 
-                // نمایش زمان - هم‌عرض با کانتینر نوار پیشرفت
+                // نمایش زمان واقعی
                 SizedBox(
-                  width: 280, // عرض یکسان با کانتینر نوار پیشرفت
+                  width: 280,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "1:30", // زمان فعلی
+                          _formatDuration(_position), // زمان فعلی واقعی
                           style: TextStyle(
                             color: Colors.grey[400],
                             fontSize: 12,
@@ -492,7 +577,7 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                           ),
                         ),
                         Text(
-                          "3:00", // زمان کل
+                          _formatDuration(_duration), // زمان کل واقعی
                           style: TextStyle(
                             color: Colors.grey[400],
                             fontSize: 12,
@@ -508,7 +593,6 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                 // دکمه‌های کنترل پخش
                 SizedBox(
                   height: 80,
-
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -519,10 +603,12 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                           color: Colors.white,
                           size: 32,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          // عملکرد دکمه عقب (می‌توانید اضافه کنید)
+                        },
                       ),
 
-                      // دکمه پخش/توقف
+                      // دکمه پخش/توقف با وضعیت واقعی
                       Container(
                         width: 64,
                         height: 64,
@@ -539,12 +625,7 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                             size: 40,
                           ),
                           onPressed: () {
-                            setState(() {
-                              isPlaying = !isPlaying;
-                            });
-                            MusicPlayerManager.instance.playOrPauseMusic(
-                              widget.song,
-                            );
+                            _playerManager.playOrPauseMusic(widget.song);
                           },
                         ),
                       ),
@@ -556,8 +637,9 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                           color: Colors.white,
                           size: 32,
                         ),
-
-                        onPressed: () {},
+                        onPressed: () {
+                          // عملکرد دکمه جلو (می‌توانید اضافه کنید)
+                        },
                       ),
                     ],
                   ),
