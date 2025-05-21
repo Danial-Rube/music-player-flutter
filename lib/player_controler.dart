@@ -20,7 +20,7 @@ class MusicPlayerManager {
   final AudioPlayer _audioPlayer = AudioPlayer();
 
   // برای دسترسی به فایل‌های صوتی گوشی
-  final OnAudioQuery _audioQuery = OnAudioQuery();
+  //final OnAudioQuery _audioQuery = OnAudioQuery();
 
   // متغیرهای مدیریت وضعیت
   Song? _currentSong;
@@ -28,6 +28,10 @@ class MusicPlayerManager {
   // گترها برای دسترسی به وضعیت فعلی
   Song? get currentSong => _currentSong;
   bool get isPlaying => _audioPlayer.playing;
+
+  bool isPlayingthis(Song song) {
+    return _currentSong?.id == song.id && _audioPlayer.playing;
+  }
 
   // متد برای درخواست مجوز دسترسی به فایل‌های صوتی
   static Future<bool> _requestPermission() async {
@@ -96,9 +100,14 @@ class MusicPlayerManager {
     try {
       if (_currentSong == null || _currentSong?.id != song.id) {
         // آهنگ جدید یا متفاوت
+        debugPrint('TRY TO SET NEW SONG');
         _currentSong = song;
         await _audioPlayer.stop();
-        await _audioPlayer.setFilePath(song.filePath);
+
+        await _audioPlayer.setAudioSource(
+          AudioSource.uri(Uri.parse(song.filePath)),
+        );
+
         await _audioPlayer.play();
       } else {
         // همان آهنگ در حال پخش است - توقف/ادامه

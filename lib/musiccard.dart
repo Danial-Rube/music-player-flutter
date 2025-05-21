@@ -32,7 +32,7 @@ class _MusicCardState extends State<MusicCard> {
 
   void _changePlayStatus() {
     setState(() {
-      isPlaying = !isPlaying;
+      //isPlaying = !isPlaying;
     });
   }
 
@@ -132,14 +132,25 @@ class _MusicCardState extends State<MusicCard> {
                   // دکمه پخش در سمت راست
                   IconButton(
                     onPressed: () {
+                      debugPrint("music path: ${widget.song.filePath}");
                       MusicPlayerManager.instance.playOrPauseMusic(widget.song);
+                      setState(() {
+                        isPlaying = !isPlaying;
+                      });
                     },
 
-                    icon: const Icon(
-                      Icons.play_circle_fill_rounded,
-                      color: Color(0xFFDADADA),
-                      size: 32,
-                    ),
+                    icon:
+                        isPlaying
+                            ? const Icon(
+                              Icons.pause_circle_filled_rounded,
+                              color: Color(0xFFDADADA),
+                              size: 32,
+                            )
+                            : const Icon(
+                              Icons.play_circle_fill_rounded,
+                              color: Color(0xFFDADADA),
+                              size: 32,
+                            ),
 
                     //padding: EdgeInsets.zero,
                     //constraints: const BoxConstraints(),
