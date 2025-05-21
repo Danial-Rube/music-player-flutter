@@ -184,23 +184,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-
-              if (localSongs.isEmpty)
+              if (_isLoading)
                 Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: IconButton(
-                    onPressed:
-                        _isLoading
-                            ? null
-                            : _loadDeviceSongs, // غیرفعال کردن دکمه هنگام بارگذاری
-                    icon: Icon(
-                      Icons.refresh_rounded,
-                      color:
-                          _isLoading
-                              ? Color(0xFF4F4F4F)
-                              : Color(0xFFD7D7D7), // تغییر رنگ هنگام بارگذاری
-                    ),
-                    tooltip: 'Refresh songs',
+                  padding: const EdgeInsets.only(right: 2),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 30),
+                      Text(
+                        "Loading songs...",
+                        style: TextStyle(
+                          color: Color(0xFF9E9E9E),
+                          fontWeight: FontWeight.w200,
+                          fontFamily: 'Opensans',
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Icon(Icons.refresh_rounded, color: Color(0xFF4F4F4F)),
+                    ],
                   ),
                 ),
 
