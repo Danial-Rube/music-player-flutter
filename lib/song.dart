@@ -22,3 +22,4 @@ class Song {
     String? coverPath,
   }) : coverPath = coverPath ?? "dsds ";
 }
+
