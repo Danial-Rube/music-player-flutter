@@ -1,5 +1,6 @@
 //صفحه ی لیست خرید
 import 'package:flutter/material.dart';
+import 'package:test_app/player_controler.dart';
 import 'package:test_app/song.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -159,7 +160,51 @@ class _CheckoutPageState extends State<CheckoutPage> {
             padding: const EdgeInsets.symmetric(vertical: 16),
           ),
           //اکشن پرداخت
-          onPressed: () {},
+          onPressed: () {
+            if (_currentCartItems.isEmpty) {
+              //بررسی خالی بودن سبد خرید
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Your cart is empty!',
+                    style: TextStyle(
+                      color: Colors.red[300],
+                      fontFamily: 'Opensans',
+                    ),
+                  ),
+                  backgroundColor: Color(0xFF1A1A1A),
+                ),
+              );
+              return;
+            }
+            //اضافه کردن اهنگ ها به پلی لیست دانلودی
+            for (var song in _currentCartItems) {
+              if (!downloadSongs.any((item) => item.id == song.id)) {
+                downloadSongs.add(song);
+              }
+            }
+            //خالی کردن لیست
+            setState(() {
+              _currentCartItems.clear();
+            });
+            widget.onCartUpdated(_currentCartItems);
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Music added to your downloads.',
+                  style: TextStyle(
+                    color: Colors.green[400],
+                    fontFamily: 'Opensans',
+                  ),
+                ),
+                backgroundColor: Color(0xFF1A1A1A),
+              ),
+            );
+            //برگشت به صفحه ی قبل
+            Navigator.of(context).pop();
+          },
+
           child: Text(
             'Pay \$${_sumPrices()}',
             style: TextStyle(

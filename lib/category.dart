@@ -5,62 +5,53 @@ import 'package:test_app/song.dart';
 
 List<Song> shopsongs = [
   Song(
-    id: "sds",
-    title: "Pink Floyd",
-    artist: "Ross",
-    coverPath: "assets/images/pink.jpg",
-    filePath: "sdss",
-    price: 4.5,
+    id: "_downloadlololvyyy",
+    title: "ZarreBin",
+    artist: "Mohsen Cavooshi",
+    coverPath: "assets/downloaded_songs/c5.jpg",
+    filePath: "assets/downloaded_songs/ZarreBin.mp3",
+    price: 99.9,
   ),
   Song(
     id: "sdsd",
-    title: "Save Your Tears",
-    artist: "The Weeknd",
-    coverPath: "assets/images/drug.jpg",
-    filePath: "sdsd",
+    title: "Something on the way",
+    artist: "Nirvana",
+    coverPath: "assets/downloaded_songs/c6.jpg",
+    filePath: "assets/downloaded_songs/nirvana.mp3",
     price: 7.99,
   ),
   Song(
-    id: "sssd",
-    title: "Starboy",
-    artist: "The Weeknd",
-    coverPath: "assets/images/rock.jpg",
-    filePath: "Ssdsd",
+    id: "_downloaduqwe8",
+    title: "Kiss Me",
+    artist: "Rob Vischer",
+    coverPath: "assets/downloaded_songs/c7.jpg",
+    filePath: "assets/downloaded_songs/kiss_me.mp3",
     price: 22.3,
   ),
   Song(
-    id: "sds",
-    title: "Shape of You",
-    artist: "Ed Sheeran",
-    coverPath: "assets/images/see.jpg",
-    filePath: "dssds",
+    id: "_downloadhhgghh",
+    title: "Assema Abi",
+    artist: "Viguen",
+    coverPath: "assets/downloaded_songs/c8.jpg",
+    filePath: "assets/downloaded_songs/Asemane_Abi.mp3",
   ),
   Song(
-    id: "ksdjs",
-    title: "Bad Guy",
-    artist: "Billie Eilish",
-    coverPath: "assets/images/pink.jpg",
-    filePath: "sdssd",
+    id: "_downloadzx11zx",
+    title: "One last goodbye",
+    artist: "Vincent Cavanagh",
+    coverPath: "assets/downloaded_songs/c9.jpg",
+    filePath: "assets/downloaded_songs/One_Last_Goodbye.mp3",
     price: 9.1,
   ),
   Song(
-    id: "dksd",
-    title: "Stay",
-    artist: "Justin Bieber",
-    coverPath: "assets/images/see.jpg",
-    filePath: "sdssdds",
+    id: "_downloadzxd9sdk",
+    title: "I Fead The End",
+    artist: "Swarm of the Sun",
+    coverPath: "assets/downloaded_songs/c10.jpg",
+    filePath: "assets/downloaded_songs/Fear_End.mp3",
+    price: 17.7,
   ),
 ];
-
-const Text _localTitle = Text(
-  'Local Songs',
-  style: TextStyle(
-    color: Color(0xFFD7D7D7),
-    fontSize: 22,
-    fontWeight: FontWeight.bold,
-    fontFamily: 'Opensans',
-  ),
-);
 
 class CategoriesPage extends StatelessWidget {
   final int _currentIndex = 1; // برای پیگیری تب فعال
@@ -79,6 +70,7 @@ class CategoriesPage extends StatelessWidget {
       backgroundColor: const Color(0xFF0F0F0F),
 
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           'Categories',
           style: TextStyle(
