@@ -1,5 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/navigation.dart';
+import 'package:test_app/shop.dart';
+import 'package:test_app/song.dart';
+
+List<Song> shopsongs = [
+  Song(
+    id: "sds",
+    title: "Pink Floyd",
+    artist: "Ross",
+    coverPath: "assets/images/pink.jpg",
+    filePath: "sdss",
+  ),
+  Song(
+    id: "sdsd",
+    title: "Save Your Tears",
+    artist: "The Weeknd",
+    coverPath: "assets/images/drug.jpg",
+    filePath: "sdsd",
+  ),
+  Song(
+    id: "sssd",
+    title: "Starboy",
+    artist: "The Weeknd",
+    coverPath: "assets/images/rock.jpg",
+    filePath: "Ssdsd",
+  ),
+  Song(
+    id: "sds",
+    title: "Shape of You",
+    artist: "Ed Sheeran",
+    coverPath: "assets/images/see.jpg",
+    filePath: "dssds",
+  ),
+  Song(
+    id: "ksdjs",
+    title: "Bad Guy",
+    artist: "Billie Eilish",
+    coverPath: "assets/images/pink.jpg",
+    filePath: "sdssd",
+  ),
+  Song(
+    id: "dksd",
+    title: "Stay",
+    artist: "Justin Bieber",
+    coverPath: "assets/images/see.jpg",
+    filePath: "sdssdds",
+  ),
+];
+
+const Text _localTitle = Text(
+  'Local Songs',
+  style: TextStyle(
+    color: Color(0xFFD7D7D7),
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Opensans',
+  ),
+);
 
 class CategoriesPage extends StatelessWidget {
   final int _currentIndex = 1; // برای پیگیری تب فعال
@@ -29,6 +86,7 @@ class CategoriesPage extends StatelessWidget {
         backgroundColor: const Color(0xFF0F0F0F),
         centerTitle: true,
       ),
+
       body: ListView.separated(
         padding: EdgeInsets.zero,
         itemCount: categories.length,
@@ -37,15 +95,19 @@ class CategoriesPage extends StatelessWidget {
                 const SizedBox(height: 0.0), // تنظیم فاصله بین عکس‌ها
         itemBuilder: (context, index) {
           return GestureDetector(
+            //هدایت کاربر به صفحات کتگوری
             onTap: () {
               //
               debugPrint('Clicked on ${categories[index].name}');
 
-              // مثال: نمایش یک اسنک‌بار
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('${categories[index].name} category selected'),
-                  duration: const Duration(seconds: 1),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) => MusicShopPage(
+                        title: categories[index].name,
+                        songs: shopsongs,
+                      ),
                 ),
               );
             },

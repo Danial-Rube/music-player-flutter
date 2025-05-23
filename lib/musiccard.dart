@@ -19,7 +19,6 @@ const TextStyle _artistStyle = TextStyle(
 );
 
 //کلاس اصلی موزیک کارت
-//کلاس اصلی موزیک کارت
 class MusicCard extends StatefulWidget {
   final Song song;
 
@@ -248,10 +247,13 @@ class _MusicPageListState extends State<MusicPageList> {
             fontWeight: FontWeight.bold,
           ),
         ),
+
+        //دکمه ی برگشت
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: Icon(Icons.keyboard_arrow_left_rounded, color: Colors.white70),
         ),
+
         actions: [
           TextButton.icon(
             onPressed: _sortSongs,
@@ -264,6 +266,7 @@ class _MusicPageListState extends State<MusicPageList> {
               style: TextStyle(color: Colors.white, fontFamily: 'Opensans'),
             ),
           ),
+
           TextButton.icon(
             onPressed: _shuffleSongs,
             icon: Icon(Icons.shuffle, color: Color(0xFF004B95)),

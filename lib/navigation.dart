@@ -4,7 +4,7 @@ import 'package:test_app/home.dart';
 import 'package:test_app/login_singup.dart';
 
 //بررسی ورود کاربر
-bool isLogedin = false;
+bool isLogedin = true;
 
 Widget navigationControler(BuildContext context, int currentIndex) {
   return Padding(
