@@ -4,6 +4,7 @@ import 'package:test_app/login_singup.dart';
 import 'package:test_app/navigation.dart';
 import 'package:test_app/verifytool.dart';
 
+//صفحه ی ثبت نام
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -17,7 +18,6 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   final _repassController = TextEditingController();
   bool _obscureText = true;
-  final int _currentIndex = 1;
 
   @override
   void dispose() {
@@ -252,12 +252,14 @@ class _LoginPageState extends State<LoginPage> {
 
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
+                        /*Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => SingupPage(),
-                          ), // انتقال به صفحه لاگین
-                        );
+                          ), 
+                        );*/
+                        //انتقال به صفحه ی لاگین
+                        Navigator.pop(context);
                       },
                       child: const Text(
                         'log-in',
@@ -275,7 +277,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
 
-      bottomNavigationBar: navigationControler(context, _currentIndex),
+      //bottomNavigationBar: navigationControler(context, _currentIndex),
     );
   }
 }

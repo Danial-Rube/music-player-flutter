@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/navigation.dart';
-import 'package:test_app/song.dart';
 
 class CategoriesPage extends StatelessWidget {
   final int _currentIndex = 1; // برای پیگیری تب فعال

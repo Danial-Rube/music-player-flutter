@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/category.dart';
 import 'package:test_app/home.dart';
-import 'package:test_app/login.dart';
+import 'package:test_app/login_singup.dart';
+
+//بررسی ورود کاربر
+bool isLogedin = false;
 
 Widget navigationControler(BuildContext context, int currentIndex) {
   return Padding(
@@ -32,7 +35,11 @@ Widget navigationControler(BuildContext context, int currentIndex) {
                   case 1:
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => CategoriesPage()),
+                      MaterialPageRoute(
+                        builder:
+                            (context) =>
+                                isLogedin ? CategoriesPage() : SingupPage(),
+                      ),
                     );
                     break;
                 }

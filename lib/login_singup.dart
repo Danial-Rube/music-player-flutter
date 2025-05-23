@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:test_app/login.dart';
+import 'package:test_app/navigation.dart';
 
+//صفحه ی ورود
 class SingupPage extends StatefulWidget {
   const SingupPage({super.key});
 
@@ -12,6 +15,7 @@ class _SingupPageState extends State<SingupPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscureText = true;
+  final int _currentIndex = 1;
 
   @override
   void dispose() {
@@ -157,7 +161,12 @@ class _SingupPageState extends State<SingupPage> {
 
                     TextButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        //Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                        );
+                        //انتقال به صفحه ثبت نام
                       },
                       child: const Text(
                         'sing-up',
@@ -174,6 +183,8 @@ class _SingupPageState extends State<SingupPage> {
           ),
         ),
       ),
+
+      bottomNavigationBar: navigationControler(context, _currentIndex),
     );
   }
 }
