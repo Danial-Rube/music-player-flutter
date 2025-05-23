@@ -4,6 +4,51 @@ import 'package:test_app/navigation.dart';
 import 'package:test_app/song.dart';
 import 'package:test_app/player_controler.dart';
 
+List<Song> downloadSongs = [
+  Song(
+    id: "sds",
+    title: "Pink Floyd",
+    artist: "Ross",
+    coverPath: "assets/images/pink.jpg",
+    filePath: "sdss",
+  ),
+  Song(
+    id: "sdsd",
+    title: "Save Your Tears",
+    artist: "The Weeknd",
+    coverPath: "assets/images/drug.jpg",
+    filePath: "sdsd",
+  ),
+  Song(
+    id: "sssd",
+    title: "Starboy",
+    artist: "The Weeknd",
+    coverPath: "assets/images/rock.jpg",
+    filePath: "Ssdsd",
+  ),
+  Song(
+    id: "sds",
+    title: "Shape of You",
+    artist: "Ed Sheeran",
+    coverPath: "assets/images/see.jpg",
+    filePath: "dssds",
+  ),
+  Song(
+    id: "ksdjs",
+    title: "Bad Guy",
+    artist: "Billie Eilish",
+    coverPath: "assets/images/pink.jpg",
+    filePath: "sdssd",
+  ),
+  Song(
+    id: "dksd",
+    title: "Stay",
+    artist: "Justin Bieber",
+    coverPath: "assets/images/see.jpg",
+    filePath: "sdssdds",
+  ),
+];
+
 const Text _localTitle = Text(
   'Local Songs',
   style: TextStyle(
@@ -35,51 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final int _currentIndex = 0; // برای پیگیری تب فعال
   bool _isLoading = true;
   final TextEditingController _searchController = TextEditingController();
-
-  final List<Song> songs = [
-    Song(
-      id: "sds",
-      title: "Pink Floyd",
-      artist: "Ross",
-      coverPath: "assets/images/pink.jpg",
-      filePath: "sdss",
-    ),
-    Song(
-      id: "sdsd",
-      title: "Save Your Tears",
-      artist: "The Weeknd",
-      coverPath: "assets/images/drug.jpg",
-      filePath: "sdsd",
-    ),
-    Song(
-      id: "sssd",
-      title: "Starboy",
-      artist: "The Weeknd",
-      coverPath: "assets/images/rock.jpg",
-      filePath: "Ssdsd",
-    ),
-    Song(
-      id: "sds",
-      title: "Shape of You",
-      artist: "Ed Sheeran",
-      coverPath: "assets/images/see.jpg",
-      filePath: "dssds",
-    ),
-    Song(
-      id: "ksdjs",
-      title: "Bad Guy",
-      artist: "Billie Eilish",
-      coverPath: "assets/images/pink.jpg",
-      filePath: "sdssd",
-    ),
-    Song(
-      id: "dksd",
-      title: "Stay",
-      artist: "Justin Bieber",
-      coverPath: "assets/images/see.jpg",
-      filePath: "sdssdds",
-    ),
-  ];
 
   @override
   void initState() {
@@ -134,7 +134,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   List<Song> searchedSong = [];
                   for (Song s in localSongs) {
                     if (s.title.toLowerCase().contains(
-                      _searchController.text.toLowerCase(),
+                      _searchController.text.toLowerCase().trim(),
+                    )) {
+                      searchedSong.add(s);
+                    }
+                  }
+                  for (Song s in downloadSongs) {
+                    if (s.title.toLowerCase().contains(
+                      _searchController.text.toLowerCase().trim(),
                     )) {
                       searchedSong.add(s);
                     }
@@ -171,7 +178,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               (context) => MusicPageList(
                                 title: 'Local Songs',
                                 //بررسی خالی یا پر بودن لیست اهنگ های دریافت شده از گوشی
-                                songs: localSongs.isEmpty ? songs : localSongs,
+                                songs:
+                                    localSongs.isEmpty
+                                        ? downloadSongs
+                                        : localSongs,
                               ),
                         ),
                       );
@@ -232,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder:
                               (context) => MusicPageList(
                                 title: 'Downlodas',
-                                songs: songs,
+                                songs: downloadSongs,
                               ),
                         ),
                       );
@@ -249,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
               //لیست اهنگ های دانلودی
               SizedBox(
                 height: 250, // ارتفاع کل لیست
-                child: musicList(songs),
+                child: musicList(downloadSongs),
               ),
             ],
           ),
