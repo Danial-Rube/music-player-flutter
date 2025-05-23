@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:test_app/user.dart';
+
+User? activeUser;
 
 enum ValidationError {
   none,
@@ -49,7 +52,7 @@ class ValidationHelper {
           ),
         ),
         backgroundColor: Color(0xFF282828),
-        duration: Duration(seconds: 3),
+        duration: Duration(seconds: 1),
         margin: EdgeInsets.only(
           bottom: 20.0, // فاصله از پایین
           left: 15.0, // فاصله از چپ

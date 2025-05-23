@@ -27,7 +27,7 @@ class _SingupPageState extends State<SingupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF000000), // رنگ بکگراند
+      backgroundColor: const Color(0xFF0F0F0F), // رنگ بکگراند
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -61,7 +61,7 @@ class _SingupPageState extends State<SingupPage> {
                       ), //رنگ متن راهنما
 
                       filled: true,
-                      fillColor: Color(0xFF282828), // رنگ داخل فیلد
+                      fillColor: Color(0xFF1A1A1A), // رنگ داخل فیلد
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: BorderSide.none,
@@ -94,7 +94,7 @@ class _SingupPageState extends State<SingupPage> {
                       ),
                       hintStyle: TextStyle(color: Color(0xFF4F4F4F)),
                       filled: true,
-                      fillColor: Color(0xFF282828),
+                      fillColor: Color(0xFF1A1A1A),
                       suffixIcon: IconButton(
                         icon: Icon(
                           color: Color(0xFF0069D2),

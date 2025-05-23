@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:test_app/category.dart';
 import 'package:test_app/login_singup.dart';
 import 'package:test_app/navigation.dart';
+import 'package:test_app/user.dart';
 import 'package:test_app/verifytool.dart';
 
 //صفحه ی ثبت نام
@@ -32,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //back ground settings
-      backgroundColor: const Color(0xFF000000), // رنگ بکگراند
+      backgroundColor: const Color(0xFF0F0F0F), // رنگ بکگراند
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -61,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       hintStyle: TextStyle(color: Color(0xFF4F4F4F)),
                       filled: true,
-                      fillColor: Color(0xFF282828),
+                      fillColor: Color(0xFF1A1A1A),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: BorderSide.none,
@@ -94,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       hintStyle: TextStyle(color: Color(0xFF4F4F4F)),
                       filled: true,
-                      fillColor: Color(0xFF282828),
+                      fillColor: Color(0xFF1A1A1A),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: BorderSide.none,
@@ -126,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       hintStyle: TextStyle(color: Color(0xFF4F4F4F)),
                       filled: true,
-                      fillColor: Color(0xFF282828),
+                      fillColor: Color(0xFF1A1A1A),
                       suffixIcon: IconButton(
                         icon: Icon(
                           color: Color(0xFF0069D2),
@@ -168,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),*/
                       hintStyle: TextStyle(color: Color(0xFF4F4F4F)),
                       filled: true,
-                      fillColor: Color(0xFF282828),
+                      fillColor: Color(0xFF1A1A1A),
                       suffixIcon: IconButton(
                         icon: Icon(
                           color: Color(0xFF0069D2),
@@ -221,6 +222,12 @@ class _LoginPageState extends State<LoginPage> {
 
                       if (vrifyed) {
                         debugPrint("verifyed");
+                        //ساخت یوزر جدید
+                        activeUser = User(
+                          name: _nameController.text,
+                          email: _emailController.text,
+                          passWord: _passwordController.text,
+                        );
                         //انتقال به صفحه ی کنگوری در صورت تایید ثبت نام
                         isLogedin = true;
                         Navigator.pushReplacement(
