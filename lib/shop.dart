@@ -89,42 +89,56 @@ class _MusicShopPageState extends State<MusicShopPage> {
 
         actions: [
           //ایکون پروفایل
-          IconButton(
-            icon: const Icon(Icons.account_circle, color: Color(0xFF004B95)),
-            onPressed: () {},
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0), // فاصله از سمت راست
+            child: IconButton(
+              iconSize: 28,
+              icon: const Icon(Icons.account_circle, color: Color(0xFF0064C8)),
+              onPressed: () {},
+            ),
           ),
 
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              //آیکون لیست خرید
-              IconButton(
-                icon: const Icon(Icons.shopping_cart, color: Color(0xFF004B95)),
-                onPressed: goToCheckoutPage,
-              ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                //آیکون لیست خرید
+                IconButton(
+                  iconSize: 28,
+                  icon: const Icon(
+                    Icons.shopping_cart,
+                    color: Color(0xFF0064C8),
+                  ),
+                  onPressed: goToCheckoutPage,
+                ),
 
-              if (cartItems.isNotEmpty)
-                Positioned(
-                  top: 5,
-                  right: 5,
-                  child: Container(
-                    padding: const EdgeInsets.all(2),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF1DB954),
-                      shape: BoxShape.circle,
-                    ),
-                    constraints: const BoxConstraints(
-                      minWidth: 16,
-                      minHeight: 16,
-                    ),
-                    child: Text(
-                      '${cartItems.length}',
-                      style: const TextStyle(color: Colors.white, fontSize: 10),
-                      textAlign: TextAlign.center,
+                if (cartItems.isNotEmpty)
+                  Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF1DB954),
+                        shape: BoxShape.circle,
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                      ),
+                      child: Text(
+                        '${cartItems.length}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
