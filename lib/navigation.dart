@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_app/category.dart';
 import 'package:test_app/home.dart';
 import 'package:test_app/login.dart';
 
@@ -31,7 +32,7 @@ Widget navigationControler(BuildContext context, int currentIndex) {
                   case 1:
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
+                      MaterialPageRoute(builder: (context) => CategoriesPage()),
                     );
                     break;
                 }
