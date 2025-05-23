@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_app/payment_manager.dart';
 import 'package:test_app/song.dart';
 
 class MusicShopPage extends StatefulWidget {
@@ -187,139 +188,7 @@ class _MusicShopPageState extends State<MusicShopPage> {
   }
 }
 
-//صفحه ی لیست خرید
-class CheckoutPage extends StatefulWidget {
-  final List<Song> cartItems;
-  final Function(List<Song>) onCartUpdated;
-  const CheckoutPage({
-    super.key,
-    required this.cartItems,
-    required this.onCartUpdated,
-  });
-
-  @override
-  State<CheckoutPage> createState() => _CheckoutPageState();
-}
-
-class _CheckoutPageState extends State<CheckoutPage> {
-  late List<Song> _currentCartItems;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentCartItems = List.from(widget.cartItems);
-  }
-
-  void _removeFromCart(Song song) {
-    setState(() {
-      _currentCartItems.removeWhere((item) => item.id == song.id);
-    });
-    widget.onCartUpdated(_currentCartItems);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${song.title} removed from cart'),
-        duration: const Duration(seconds: 1),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      //بک گراند رنگ
-      backgroundColor: const Color(0xFF121212),
-
-      appBar: AppBar(
-        toolbarHeight: 70.0,
-        title: const Text(
-          "Checkout",
-          style: TextStyle(
-            fontFamily: 'Opensans',
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
-            fontSize: 20,
-          ),
-        ),
-
-        backgroundColor: const Color(0xFF1A1A1A),
-
-        //دکمه ی بازگشت
-        leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
-          icon: Icon(Icons.keyboard_arrow_left_rounded, color: Colors.white70),
-        ),
-      ),
-
-      body: ListView.builder(
-        itemCount: _currentCartItems.length,
-        itemBuilder: (context, index) {
-          final song = _currentCartItems[index];
-          return ListTile(
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                song.coverPath,
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
-                errorBuilder:
-                    (context, error, stackTrace) => Container(
-                      width: 50,
-                      height: 50,
-                      color: Colors.grey[800],
-                      child: const Icon(
-                        Icons.music_note,
-                        color: Colors.white54,
-                      ),
-                    ),
-              ),
-            ),
-
-            title: Text(
-              song.title,
-              style: const TextStyle(color: Colors.white),
-            ),
-
-            subtitle: Text(
-              song.artist,
-              style: const TextStyle(color: Colors.grey),
-            ),
-
-            trailing: IconButton(
-              icon: const Icon(Icons.remove_circle_outline, color: Colors.red),
-              onPressed: () => _removeFromCart(song),
-            ),
-          );
-        },
-      ),
-
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF369D2C),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
-            ),
-
-            padding: const EdgeInsets.symmetric(vertical: 16),
-          ),
-          //اکشن پرداخت
-          onPressed: () {},
-          child: const Text(
-            'Pay Now',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Opensans',
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//کارت خرید اهنگ
 
 const TextStyle _titleStyle = TextStyle(
   color: Color(0xFFDADADA),
@@ -352,7 +221,7 @@ class _ShopCardState extends State<ShopCard> {
     return Container(
       //تنظیمات مربوط به کانتیرنر
       width: 150.0,
-      height: 230,
+      height: 240,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A1A),
@@ -428,6 +297,18 @@ class _ShopCardState extends State<ShopCard> {
                             style: _artistStyle,
                             overflow: TextOverflow.ellipsis,
                           ),
+
+                          //قیمت
+                          const SizedBox(height: 1),
+                          Text(
+                            "\$${widget.song.price}",
+                            style: TextStyle(
+                              color: Colors.green[400],
+                              fontFamily: 'Opensans',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12.0,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -441,10 +322,7 @@ class _ShopCardState extends State<ShopCard> {
 
                     iconSize: 32.0,
 
-                    icon: Icon(
-                      Icons.add_circle_rounded,
-                      color: Color(0xFF53C148),
-                    ),
+                    icon: Icon(Icons.add_circle_rounded, color: Colors.green),
 
                     //padding: EdgeInsets.zero,
                     //constraints: const BoxConstraints(),

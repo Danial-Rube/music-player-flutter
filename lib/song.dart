@@ -10,6 +10,7 @@ class Song {
   final String? genre;
   final String coverPath;
   final Uint8List? artwork;
+  final double price;
 
   Song({
     required this.id,
@@ -19,6 +20,7 @@ class Song {
     this.duration,
     this.genre,
     this.artwork,
+    this.price = 1.99,
     String? coverPath,
   }) : coverPath = coverPath ?? "dsds ";
 }

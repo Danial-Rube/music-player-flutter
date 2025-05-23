@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:test_app/category.dart';
 import 'package:test_app/login_singup.dart';
 import 'package:test_app/navigation.dart';
 import 'package:test_app/verifytool.dart';
@@ -220,6 +221,14 @@ class _LoginPageState extends State<LoginPage> {
 
                       if (vrifyed) {
                         debugPrint("verifyed");
+                        //انتقال به صفحه ی کنگوری در صورت تایید ثبت نام
+                        isLogedin = true;
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CategoriesPage(),
+                          ),
+                        );
                       } else {
                         debugPrint("not verifyed!");
                       }
