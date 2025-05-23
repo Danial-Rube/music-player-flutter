@@ -10,6 +10,7 @@ List<Song> shopsongs = [
     artist: "Ross",
     coverPath: "assets/images/pink.jpg",
     filePath: "sdss",
+    price: 4.5,
   ),
   Song(
     id: "sdsd",
@@ -17,6 +18,7 @@ List<Song> shopsongs = [
     artist: "The Weeknd",
     coverPath: "assets/images/drug.jpg",
     filePath: "sdsd",
+    price: 7.99,
   ),
   Song(
     id: "sssd",
@@ -24,6 +26,7 @@ List<Song> shopsongs = [
     artist: "The Weeknd",
     coverPath: "assets/images/rock.jpg",
     filePath: "Ssdsd",
+    price: 22.3,
   ),
   Song(
     id: "sds",
@@ -38,6 +41,7 @@ List<Song> shopsongs = [
     artist: "Billie Eilish",
     coverPath: "assets/images/pink.jpg",
     filePath: "sdssd",
+    price: 9.1,
   ),
   Song(
     id: "dksd",

@@ -7,6 +7,38 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:test_app/song.dart';
 
+//لیست آهنگ دانلودی
+List<Song> downloadSongs = [
+  Song(
+    id: "_downloaddkfj",
+    title: "Anathema",
+    artist: "Vincent Cavanagh",
+    coverPath: "assets/downloaded_songs/c1.jpg",
+    filePath: "assets/downloaded_songs/fragile_dreams.mp3",
+  ),
+  Song(
+    id: "_downloaddkjfk",
+    title: "All of Me",
+    artist: "Jason",
+    coverPath: "assets/downloaded_songs/c2.jpg",
+    filePath: "assets/downloaded_songs/all-of-me-john-legend.mp3",
+  ),
+  Song(
+    id: "_downloadddfoofk",
+    title: "Kaleo",
+    artist: "The Weeknd",
+    coverPath: "assets/downloaded_songs/c3.jpg",
+    filePath: "assets/downloaded_songs/KALEO.mp3",
+  ),
+  Song(
+    id: "_downloaddddddaofk",
+    title: "Arayeshe Ghaliz",
+    artist: "Homayoun Shajarian",
+    coverPath: "assets/downloaded_songs/c4.jpg",
+    filePath: "assets/downloaded_songs/Arayeshe_Ghaliz.mp3",
+  ),
+];
+
 // لیست‌های گلوبال برای آهنگ‌ها
 List<Song> localSongs = [];
 
@@ -90,9 +122,15 @@ class MusicPlayerManager {
         _currentSong = song;
         await _audioPlayer.stop();
 
-        await _audioPlayer.setAudioSource(
-          AudioSource.uri(Uri.parse(song.filePath)),
-        );
+        if (song.filePath.startsWith('assets/downloaded_songs/')) {
+          // بررسی لوکال یا سمت سرور بودن آهنگ
+          await _audioPlayer.setAsset(song.filePath);
+        } else {
+          // اگر فایل در حافظه دستگاه است
+          await _audioPlayer.setAudioSource(
+            AudioSource.uri(Uri.parse(song.filePath)),
+          );
+        }
 
         await _audioPlayer.play();
       } else {
