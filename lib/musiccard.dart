@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:test_app/player_controler.dart';
 import 'package:test_app/song.dart';
@@ -92,9 +91,16 @@ class _MusicCardState extends State<MusicCard> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MusicPlayPage(song: widget.song),
+                  builder:
+                      (context) => MusicPlayPage(
+                        song: widget.song,
+                        onChanged: () {
+                          if (mounted) setState(() {});
+                        },
+                      ),
                 ),
               );
+              //رفرش صفحه ی هوم
             },
             child: ClipRRect(
               borderRadius: const BorderRadius.only(
@@ -370,8 +376,9 @@ Widget notFoundMusicMessage() {
 //صفحه ی پخش موزیک
 class MusicPlayPage extends StatefulWidget {
   Song song;
+  final VoidCallback? onChanged;
 
-  MusicPlayPage({super.key, required this.song});
+  MusicPlayPage({super.key, required this.song, this.onChanged});
 
   @override
   State<MusicPlayPage> createState() => _MusicPlayPageState();
@@ -380,6 +387,7 @@ class MusicPlayPage extends StatefulWidget {
 class _MusicPlayPageState extends State<MusicPlayPage> {
   final MusicPlayerManager _playerManager = MusicPlayerManager.instance;
   bool isPlaying = false;
+  late bool isliked;
 
   // متغیرهای کنترل زمان و پیشرفت
   Duration _duration = Duration.zero;
@@ -398,6 +406,7 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
     super.initState();
     _currentSong = widget.song;
     _initPlayerAndListeners();
+    isliked = MusicPlayerManager.instance.isLike(widget.song);
   }
 
   void _initPlayerAndListeners() {
@@ -487,7 +496,7 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context, true),
           icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white70),
         ),
       ),
@@ -538,29 +547,64 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
 
                 SizedBox(height: 40),
 
-                // نام آهنگ
-                Text(
-                  _currentSong.title,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontFamily: 'Opensans',
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                // نام اهنگ و آرتیست
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // ستون حاوی نام آهنگ و نام هنرمند در سمت چپ
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _currentSong.title,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontFamily: 'Opensans',
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.left,
+                              overflow: TextOverflow.ellipsis,
+                            ),
 
-                SizedBox(height: 8),
+                            SizedBox(height: 8),
 
-                // نام هنرمند
-                Text(
-                  _currentSong.artist,
-                  style: TextStyle(
-                    color: Colors.grey[400],
-                    fontSize: 16,
-                    fontFamily: 'Opensans',
+                            Text(
+                              _currentSong.artist,
+                              style: TextStyle(
+                                color: Colors.grey[400],
+                                fontSize: 16,
+                                fontFamily: 'Opensans',
+                              ),
+                              textAlign: TextAlign.left,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // دکمه لایک در سمت راست
+                      IconButton(
+                        icon:
+                            isliked
+                                ? Icon(Icons.favorite_sharp, color: Colors.red)
+                                : Icon(Icons.favorite_outline_sharp),
+
+                        onPressed: () async {
+                          MusicPlayerManager.instance.likesong(widget.song);
+
+                          widget.onChanged?.call();
+
+                          setState(() {
+                            isliked = !isliked;
+                          });
+                        },
+                      ),
+                    ],
                   ),
-                  textAlign: TextAlign.center,
                 ),
 
                 SizedBox(height: 50),

@@ -24,6 +24,19 @@ const Text _downloadText = Text(
   ),
 );
 
+const Text _likedTitle = Text(
+  'Liked',
+  style: TextStyle(
+    color: Color(0xFFD7D7D7),
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Opensans',
+  ),
+);
+
+bool _isLoading = true;
+bool _isLodingLikedSongs = true;
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -33,14 +46,18 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final int _currentIndex = 0; // برای پیگیری تب فعال
-  bool _isLoading = true;
   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     // فراخوانی متد بارگذاری آهنگ‌ها در زمان شروع
-    _loadDeviceSongs();
+    if (_isLoading) {
+      _loadDeviceSongs();
+    }
+    if (_isLodingLikedSongs) {
+      _initLikedSongs();
+    }
   }
 
   // متد جدید برای بارگذاری آهنگ‌های گوشی
@@ -64,6 +81,21 @@ class _HomeScreenState extends State<HomeScreen> {
         _isLoading = false;
       });
       debugPrint('Error loading songs: $e');
+    }
+  }
+
+  //بارگذاری آهنگ های لایک شده
+  Future<void> _initLikedSongs() async {
+    try {
+      await MusicPlayerManager.instance.loadLikedSongs();
+      setState(() {
+        _isLodingLikedSongs = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLodingLikedSongs = false;
+        debugPrint("Errore lodaing liked songs: $e");
+      });
     }
   }
 
@@ -216,6 +248,49 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 250, // ارتفاع کل لیست
                 child: musicList(downloadSongs),
               ),
+
+              //عنوان اهنگ های لایک شده
+              if (likedSongs.isNotEmpty)
+                Align(
+                  alignment: Alignment.centerLeft,
+
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 30,
+                      top: 5.0,
+                      bottom: 1.0,
+                    ),
+
+                    child: TextButton(
+                      onPressed: () {
+                        // عملیات مورد نظر هنگام کلیک
+                        debugPrint('Downlods button pressed');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) => MusicPageList(
+                                  title: 'Liked',
+                                  songs: likedSongs,
+                                ),
+                          ),
+                        );
+                      },
+                      style: ButtonStyle(
+                        padding: WidgetStateProperty.all(EdgeInsets.zero),
+                        alignment: Alignment.centerLeft,
+                      ),
+                      child: _likedTitle,
+                    ),
+                  ),
+                ),
+
+              //لیست اهنگ های دانلودی
+              if (likedSongs.isNotEmpty)
+                SizedBox(
+                  height: 250, // ارتفاع کل لیست
+                  child: musicList(likedSongs),
+                ),
             ],
           ),
         ),

@@ -1,9 +1,11 @@
 //import 'dart:nativewrappers/_internal/vm/lib/typed_data_patch.dart';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:test_app/song.dart';
 
@@ -41,6 +43,8 @@ List<Song> downloadSongs = [
 
 // لیست‌های گلوبال برای آهنگ‌ها
 List<Song> localSongs = [];
+//لیست آهنگ های لایک شده
+List<Song> likedSongs = [];
 
 //متغیر سراری برای اعمال ui
 final ValueNotifier<String?> activeCardId = ValueNotifier(null);
@@ -196,4 +200,73 @@ class MusicPlayerManager {
   Stream<Duration> get positionStream => _audioPlayer.positionStream;
   Duration get position => _audioPlayer.position;
   Duration get duration => _audioPlayer.duration ?? Duration.zero;
+
+  /// مسیر حافظه داخلی اپ
+  Future<String> _getStoragePath() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+  // مسیر فایل لایک‌شده
+  final String _likedFileName = "liked_songsID.txt";
+
+  Future<File> _getLikedFile() async {
+    final dirPath = await _getStoragePath();
+    final path = '$dirPath/$_likedFileName';
+    final file = File(path);
+
+    if (!await file.exists()) {
+      await file.create(recursive: true);
+    }
+
+    return file;
+  }
+
+  Future<void> likesong(Song song) async {
+    final file = await _getLikedFile();
+
+    final lines = await file.readAsLines().catchError((_) => []);
+
+    if (!lines.contains(song.id)) {
+      lines.add(song.id);
+      likedSongs.add(song);
+    } else {
+      lines.remove(song.id);
+      likedSongs.remove(song);
+    }
+    await file.writeAsString(lines.join('\n'));
+  }
+
+  Future<void> loadLikedSongs() async {
+    final file = await _getLikedFile();
+
+    if (!await file.exists()) {
+      await file.create(recursive: true);
+    }
+
+    final lines = await file.readAsLines();
+    likedSongs.clear();
+
+    for (String id in lines) {
+      if (id.startsWith('_download')) {
+        try {
+          Song? song = downloadSongs.firstWhere((s) => s.id == id);
+          likedSongs.add(song);
+        } catch (e) {
+          //nothing to do
+        }
+      } else if (id.startsWith('_local')) {
+        try {
+          Song? song = localSongs.firstWhere((s) => s.id == id);
+          likedSongs.add(song);
+        } catch (e) {
+          //nothing to do
+        }
+      }
+    }
+  }
+
+  bool isLike(Song song) {
+    return likedSongs.contains(song);
+  }
 }
