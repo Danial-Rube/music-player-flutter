@@ -199,17 +199,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
             });
             widget.onCartUpdated(_currentCartItems);
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Musics added to your downloads.',
-                  style: TextStyle(
-                    color: Colors.green[400],
-                    fontFamily: 'Opensans',
-                  ),
-                ),
-                backgroundColor: Color(0xFF1A1A1A),
-              ),
+            showMessage(
+              context,
+              'Musics added to your downloads.',
+              Colors.green[400]!,
             );
             //برگشت به صفحه ی قبل
             Navigator.of(context).pop();

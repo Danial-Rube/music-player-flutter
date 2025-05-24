@@ -42,6 +42,9 @@ List<Song> downloadSongs = [
 // لیست‌های گلوبال برای آهنگ‌ها
 List<Song> localSongs = [];
 
+//متغیر سراری برای اعمال ui
+final ValueNotifier<String?> activeCardId = ValueNotifier(null);
+
 class MusicPlayerManager {
   // الگوی سینگلتون
   static final MusicPlayerManager instance = MusicPlayerManager._internal();
