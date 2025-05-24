@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/payment_manager.dart';
+import 'package:test_app/player_controler.dart';
 import 'package:test_app/song.dart';
+
+void showMessage(context, String ms, Color c) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: Color(0xFF1A1A1A),
+      content: Text(ms, style: TextStyle(color: c)),
+      duration: const Duration(seconds: 1),
+    ),
+  );
+}
 
 class MusicShopPage extends StatefulWidget {
   final String title;
@@ -16,28 +27,20 @@ class _MusicShopPageState extends State<MusicShopPage> {
 
   //تابع بررسی و اضافه کردن کارت به لیست خرید
   void addToCart(Song song) {
+    //بررسی وجود اهنگ در لیست دانلودی
+    if (downloadSongs.any((item) => item.id == song.id)) {
+      showMessage(context, 'You already have this song.', Colors.blue[200]!);
+      return;
+    }
+    // بررسی اضافه نشدن اهنگ تکرای
     if (!cartItems.any((item) => item.id == song.id)) {
       setState(() => cartItems.add(song));
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Color(0xFF1A1A1A),
-          content: Text(
-            '"${song.title}" added to cart',
-            style: TextStyle(color: Colors.green[300]),
-          ),
-          duration: const Duration(seconds: 1),
-        ),
-      );
+      showMessage(context, '"${song.title}" added to cart', Colors.white);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Color(0xFF1A1A1A),
-          content: Text(
-            '"${song.title}" is already in the cart!',
-            style: TextStyle(color: Colors.blue[200]),
-          ),
-          duration: const Duration(seconds: 1),
-        ),
+      showMessage(
+        context,
+        '"${song.title}" is already in the cart!',
+        Colors.blue[200]!,
       );
     }
   }
@@ -93,7 +96,7 @@ class _MusicShopPageState extends State<MusicShopPage> {
           Padding(
             padding: const EdgeInsets.only(right: 8.0), // فاصله از سمت راست
             child: IconButton(
-              iconSize: 28,
+              iconSize: 26,
               icon: const Icon(Icons.account_circle, color: Color(0xFF0064C8)),
               onPressed: () {},
             ),
@@ -106,7 +109,7 @@ class _MusicShopPageState extends State<MusicShopPage> {
               children: [
                 //آیکون لیست خرید
                 IconButton(
-                  iconSize: 28,
+                  iconSize: 26,
                   icon: const Icon(
                     Icons.shopping_cart,
                     color: Color(0xFF0064C8),

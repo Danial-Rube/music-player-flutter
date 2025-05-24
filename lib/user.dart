@@ -1,17 +1,23 @@
 import 'package:flutter/foundation.dart';
 
+enum Subscription { regular, premium }
+
 class User {
   String name;
   final String email;
   String passWord;
   final String defultProfile = 'assets/images/defultprofile.png';
   Uint8List? takenProfile;
+  double balance;
+  Subscription acount;
 
   User({
     required this.name,
     required this.email,
     required this.passWord,
     this.takenProfile,
+    this.balance = 25.0,
+    this.acount = Subscription.regular,
   });
 
   void setProfilePicture(Uint8List profile) {
@@ -36,5 +42,21 @@ class User {
     }
 
     return true;
+  }
+
+  bool pay(double price) {
+    if (price >= 0 && price <= balance) {
+      balance -= price;
+      return true;
+    }
+    return false;
+  }
+
+  bool addbalance(double amount) {
+    if (amount > 0) {
+      balance += amount;
+      return true;
+    }
+    return false;
   }
 }

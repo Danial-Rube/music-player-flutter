@@ -1,4 +1,3 @@
-// مدل داده ساده برای آهنگ
 import 'package:flutter/foundation.dart';
 
 class Song {

@@ -2,6 +2,17 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/player_controler.dart';
 import 'package:test_app/song.dart';
+import 'package:test_app/verifytool.dart';
+
+void showMessage(context, String ms, Color c) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: Color(0xFF1A1A1A),
+      content: Text(ms, style: TextStyle(color: c)),
+      duration: const Duration(seconds: 1),
+    ),
+  );
+}
 
 class CheckoutPage extends StatefulWidget {
   final List<Song> cartItems;
@@ -152,7 +163,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xFF242424),
+            backgroundColor: Color(0xFF104E12),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
@@ -163,18 +174,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
           onPressed: () {
             if (_currentCartItems.isEmpty) {
               //بررسی خالی بودن سبد خرید
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Your cart is empty!',
-                    style: TextStyle(
-                      color: Colors.red[300],
-                      fontFamily: 'Opensans',
-                    ),
-                  ),
-                  backgroundColor: Color(0xFF1A1A1A),
-                ),
-              );
+              showMessage(context, 'Your Cart is empty!', Colors.red);
+              return;
+            }
+
+            if (activeUser == null) {
+              debugPrint("user was not initilized!");
+              return;
+            }
+
+            if (!activeUser!.pay(_sumPrices())) {
+              showMessage(context, "Balance is not enough.", Colors.red);
               return;
             }
             //اضافه کردن اهنگ ها به پلی لیست دانلودی
@@ -192,7 +202,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  'Music added to your downloads.',
+                  'Musics added to your downloads.',
                   style: TextStyle(
                     color: Colors.green[400],
                     fontFamily: 'Opensans',
@@ -206,7 +216,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           },
 
           child: Text(
-            'Pay \$${_sumPrices()}',
+            'Pay \$${_sumPrices().toStringAsFixed(2)}',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
