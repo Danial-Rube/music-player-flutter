@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/payment_manager.dart';
 import 'package:test_app/player_controler.dart';
+import 'package:test_app/profile.dart';
 import 'package:test_app/song.dart';
 
 void showMessage(context, String ms, Color c) {
@@ -98,7 +99,12 @@ class _MusicShopPageState extends State<MusicShopPage> {
             child: IconButton(
               iconSize: 26,
               icon: const Icon(Icons.account_circle, color: Color(0xFF0064C8)),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
+              },
             ),
           ),
 

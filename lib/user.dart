@@ -52,8 +52,8 @@ class User {
     return false;
   }
 
-  bool addbalance(double amount) {
-    if (amount > 0) {
+  bool addbalance(double? amount) {
+    if (amount != null && amount > 0) {
       balance += amount;
       return true;
     }

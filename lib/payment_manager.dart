@@ -163,7 +163,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xFF104E12),
+            backgroundColor: Colors.green.withOpacity(0.1),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
@@ -214,7 +214,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               fontSize: 18,
               fontWeight: FontWeight.bold,
               fontFamily: 'Opensans',
-              color: Colors.green[400],
+              color: Colors.green,
             ),
           ),
         ),
