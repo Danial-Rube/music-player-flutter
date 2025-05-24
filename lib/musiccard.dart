@@ -32,6 +32,27 @@ class _MusicCardState extends State<MusicCard> {
   bool isPlaying = false;
 
   @override
+  void initState() {
+    super.initState();
+    activeCardId.addListener(_handleActiveCardChanged);
+  }
+
+  @override
+  void dispose() {
+    activeCardId.removeListener(_handleActiveCardChanged);
+    super.dispose();
+  }
+
+  void _handleActiveCardChanged() {
+    final shouldPlay = activeCardId.value == widget.song.id;
+    if (mounted && shouldPlay != isPlaying) {
+      setState(() {
+        isPlaying = shouldPlay;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       //تنظیمات مربوط به کانتیرنر
@@ -60,9 +81,10 @@ class _MusicCardState extends State<MusicCard> {
               // باز کردن صفحه پخش آهنگ
               debugPrint("Music selected: ${widget.song.title}");
               if (!isPlaying) {
-                setState(() {
-                  isPlaying = true;
-                });
+                activeCardId.value =
+                    (activeCardId.value == widget.song.id)
+                        ? null
+                        : widget.song.id;
               }
 
               MusicPlayerManager.instance.stopPlaying();
@@ -137,16 +159,15 @@ class _MusicCardState extends State<MusicCard> {
                     onPressed: () {
                       debugPrint("music path: ${widget.song.filePath}");
                       MusicPlayerManager.instance.playOrPauseMusic(widget.song);
-                      setState(() {
-                        isPlaying = !isPlaying;
-                      });
+
+                      activeCardId.value =
+                          (activeCardId.value == widget.song.id)
+                              ? null
+                              : widget.song.id;
                     },
 
                     icon:
-                        isPlaying ||
-                                MusicPlayerManager.instance.isPlayingthis(
-                                  widget.song,
-                                )
+                        isPlaying
                             ? const Icon(
                               Icons.pause_circle_filled_rounded,
                               color: Color(0xFFDADADA),

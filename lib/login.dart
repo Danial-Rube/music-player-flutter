@@ -247,7 +247,7 @@ class _LoginPageState extends State<LoginPage> {
                         fontFamily: 'Opensans',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 169, 169, 169),
+                        color: Colors.white,
                       ),
                     ),
                   ),

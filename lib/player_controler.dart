@@ -98,7 +98,7 @@ class MusicPlayerManager {
 
         localSongs.add(
           Song(
-            id: "#local${song.id.toString()}",
+            id: "_local${song.id.toString()}",
             title: song.title,
             artist: song.artist ?? 'Unknown Artist',
             filePath: song.uri ?? '',

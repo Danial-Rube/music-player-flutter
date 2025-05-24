@@ -34,6 +34,17 @@ class _SingupPageState extends State<SingupPage> {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
+                //عکس
+                SizedBox(
+                  child: Image.asset(
+                    'assets/images/key.png',
+                    height: 120,
+                    width: 240,
+                  ),
+                ),
+
+                SizedBox(height: 16),
+
                 //ایمیل فیلد
                 SizedBox(
                   width: 300,
@@ -140,7 +151,7 @@ class _SingupPageState extends State<SingupPage> {
                         fontFamily: 'Opensans',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 169, 169, 169),
+                        color: Colors.white,
                       ),
                     ),
                   ),

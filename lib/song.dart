@@ -10,7 +10,7 @@ class Song {
   final String coverPath;
   final Uint8List? artwork;
   final double price;
-  int stars;
+  double stars;
 
   Song({
     required this.id,
@@ -21,7 +21,7 @@ class Song {
     this.genre,
     this.artwork,
     this.price = 1.99,
-    this.stars = 1,
+    this.stars = 1.0,
     String? coverPath,
-  }) : coverPath = coverPath ?? "dsds ";
+  }) : coverPath = coverPath ?? "assets/images/pink.jpg ";
 }
