@@ -3,6 +3,7 @@ import 'package:test_app/payment_manager.dart';
 import 'package:test_app/player_controler.dart';
 import 'package:test_app/profile.dart';
 import 'package:test_app/song.dart';
+import 'package:test_app/songshopinfo.dart';
 
 void showMessage(context, String ms, Color c) {
   ScaffoldMessenger.of(context).showSnackBar(
@@ -25,6 +26,34 @@ class MusicShopPage extends StatefulWidget {
 
 class _MusicShopPageState extends State<MusicShopPage> {
   final List<Song> cartItems = [];
+  String currentSortOption = 'stars';
+
+  @override
+  void initState() {
+    super.initState();
+    sortSongs();
+  }
+
+  //متد سورت لیست آهنگ ها
+  void sortSongs() {
+    setState(() {
+      switch (currentSortOption) {
+        case 'price':
+          widget.songs.sort((a, b) => a.price.compareTo(b.price));
+          break;
+
+        case 'stars':
+          widget.songs.sort((a, b) => a.stars.compareTo(b.stars));
+          break;
+
+        case 'downloads':
+          widget.songs.sort(
+            (a, b) => a.downloadCount.compareTo(b.downloadCount),
+          );
+          break;
+      }
+    });
+  }
 
   //تابع بررسی و اضافه کردن کارت به لیست خرید
   void addToCart(Song song) {
@@ -93,6 +122,32 @@ class _MusicShopPageState extends State<MusicShopPage> {
         ),
 
         actions: [
+          DropdownButton<String>(
+            value: currentSortOption,
+            dropdownColor: Color(0xFF1A1A1A),
+            underline: SizedBox(),
+            icon: Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: Icon(Icons.sort, color: Color(0xFF0064C8), size: 23),
+            ),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontFamily: 'Opensans',
+            ),
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                currentSortOption = newValue;
+                sortSongs();
+              }
+            },
+            items: [
+              DropdownMenuItem(value: "price", child: Text("Price")),
+              DropdownMenuItem(value: "stars", child: Text("Stars")),
+              DropdownMenuItem(value: "downloads", child: Text("Downloads")),
+            ],
+          ),
+
           //ایکون پروفایل
           Padding(
             padding: const EdgeInsets.only(right: 8.0), // فاصله از سمت راست
@@ -252,6 +307,16 @@ class _ShopCardState extends State<ShopCard> {
             borderRadius: BorderRadius.circular(20),
             onTap: () {
               // باز کردن صفحه جزئیات آهنگ
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) => SongDetailPage(
+                        song: widget.song,
+                        onPaymentComplete: (song) {},
+                      ),
+                ),
+              );
             },
             child: ClipRRect(
               borderRadius: const BorderRadius.only(

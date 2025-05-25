@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/navigation.dart';
+import 'package:test_app/profile.dart';
 import 'package:test_app/shop.dart';
 import 'package:test_app/song.dart';
 
@@ -11,14 +12,18 @@ List<Song> shopsongs = [
     coverPath: "assets/downloaded_songs/c5.jpg",
     filePath: "assets/downloaded_songs/ZarreBin.mp3",
     price: 99.9,
+    downloadCount: 13,
+    stars: 4.5,
   ),
   Song(
-    id: "sdsd",
+    id: "_downloadzx002lkmk",
     title: "Something on the way",
     artist: "Nirvana",
     coverPath: "assets/downloaded_songs/c6.jpg",
     filePath: "assets/downloaded_songs/nirvana.mp3",
     price: 7.99,
+    downloadCount: 5,
+    stars: 1.2,
   ),
   Song(
     id: "_downloaduqwe8",
@@ -27,6 +32,8 @@ List<Song> shopsongs = [
     coverPath: "assets/downloaded_songs/c7.jpg",
     filePath: "assets/downloaded_songs/kiss_me.mp3",
     price: 22.3,
+    downloadCount: 22,
+    stars: 1.0,
   ),
   Song(
     id: "_downloadhhgghh",
@@ -34,6 +41,7 @@ List<Song> shopsongs = [
     artist: "Viguen",
     coverPath: "assets/downloaded_songs/c8.jpg",
     filePath: "assets/downloaded_songs/Asemane_Abi.mp3",
+    downloadCount: 19,
   ),
   Song(
     id: "_downloadzx11zx",
@@ -50,6 +58,8 @@ List<Song> shopsongs = [
     coverPath: "assets/downloaded_songs/c10.jpg",
     filePath: "assets/downloaded_songs/Fear_End.mp3",
     price: 17.7,
+    downloadCount: 2,
+    stars: 3.8,
   ),
 ];
 
@@ -70,6 +80,7 @@ class CategoriesPage extends StatelessWidget {
       backgroundColor: const Color(0xFF0F0F0F),
 
       appBar: AppBar(
+        toolbarHeight: 70,
         automaticallyImplyLeading: false,
         title: const Text(
           'Categories',
@@ -79,8 +90,27 @@ class CategoriesPage extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        backgroundColor: const Color(0xFF0F0F0F),
+        backgroundColor: const Color(0xFF1A1A1A),
         centerTitle: true,
+        actions: [
+          //ایکون پروفایل
+          Padding(
+            padding: const EdgeInsets.only(
+              right: 15.0,
+              top: 5.0,
+            ), // فاصله از سمت راست
+            child: IconButton(
+              iconSize: 26,
+              icon: const Icon(Icons.account_circle, color: Color(0xFF0064C8)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
+              },
+            ),
+          ),
+        ],
       ),
 
       body: ListView.separated(

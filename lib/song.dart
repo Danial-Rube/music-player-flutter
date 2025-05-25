@@ -11,6 +11,7 @@ class Song {
   final Uint8List? artwork;
   final double price;
   double stars;
+  int downloadCount;
 
   Song({
     required this.id,
@@ -18,10 +19,11 @@ class Song {
     required this.artist,
     required this.filePath,
     this.duration,
-    this.genre,
+    this.genre = 'Unknown',
     this.artwork,
     this.price = 1.99,
     this.stars = 1.0,
+    this.downloadCount = 17,
     String? coverPath,
   }) : coverPath = coverPath ?? "assets/images/pink.jpg ";
 }
