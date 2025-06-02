@@ -17,45 +17,11 @@ Enjoy the music! 🚀
 
 # Screenshots 📸
 
-##Home Page
-![Home Page](https://github.com/user-attachments/assets/0f0daafd-ebcf-41e7-8b32-87b5276f99d5)
 
-##Show all
-![Show All](https://github.com/user-attachments/assets/4726514e-9384-4e48-83ff-d6c0a883e45c)
+![u4](https://github.com/user-attachments/assets/e1e9264d-68ae-4e65-aec4-296b1e241d81)
 
-##Playing Muisc
-![photo_11_2025-06-02_23-39-21](https://github.com/user-attachments/assets/5026fcf8-f418-4340-b288-a50b745a4638)
+![u1](https://github.com/user-attachments/assets/3e0fdfec-d3de-4252-9c3a-04e4aa7f8517)
 
+![u2](https://github.com/user-attachments/assets/7c1af07d-d4d7-456c-8bec-e8c97d389a34)
 
-##Search
-![Search](https://github.com/user-attachments/assets/b60932a4-e094-4372-abbb-0386dce5042b)
-
-
-##Log-in Page
-![Login Page](https://github.com/user-attachments/assets/b722a2ca-2a02-4e19-907d-f5ae3b8439e4)
-
-
-##Sign-Up Page
-![photo_9_2025-06-02_23-39-21](https://github.com/user-attachments/assets/f14a4ed5-dafa-4fd0-8125-664055a04623)
-
-
-##Categories
-![photo_1_2025-06-02_23-39-21](https://github.com/user-attachments/assets/c47e3772-7c47-4701-873b-d86f93622cdc)
-
-
-##Shop Page
-![photo_6_2025-06-02_23-39-21](https://github.com/user-attachments/assets/843ca9af-2e95-40fe-9409-e1146a3d5f24)
-
-##Checkout
-![photo_8_2025-06-02_23-39-21](https://github.com/user-attachments/assets/751d6c38-0707-417c-9f5d-b5f09e3addd0)
-
-
-##Song Info
-![photo_4_2025-06-02_23-39-21](https://github.com/user-attachments/assets/78fae21c-042b-4512-98c0-68f4ed3cf8ed)
-
-
-##Profile
-![photo_10_2025-06-02_23-39-21](https://github.com/user-attachments/assets/8469af31-a36f-47c9-949a-31bf29f6f48c)
-
-![Untitled-1](https://github.com/user-attachments/assets/beb8cadf-2e3d-4669-a5ed-eef26ccc179b)
-
+![u3](https://github.com/user-attachments/assets/77067589-e286-4693-94c6-6756072d0481)
