@@ -44,8 +44,7 @@ Enjoy the music! 🚀
 
 
 ##Shop Page
-![photo_6_2025-![photo_8_2025-06-02_23-39-21](https://github.com/user-attachments/assets/1e939e05-9995-486b-9785-504008a7af9d)
-
+![photo_6_2025-06-02_23-39-21](https://github.com/user-attachments/assets/843ca9af-2e95-40fe-9409-e1146a3d5f24)
 
 ##Checkout
 ![photo_8_2025-06-02_23-39-21](https://github.com/user-attachments/assets/751d6c38-0707-417c-9f5d-b5f09e3addd0)
