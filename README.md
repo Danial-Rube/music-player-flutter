@@ -57,4 +57,5 @@ Enjoy the music! 🚀
 ##Profile
 ![photo_10_2025-06-02_23-39-21](https://github.com/user-attachments/assets/8469af31-a36f-47c9-949a-31bf29f6f48c)
 
+![Untitled-1](https://github.com/user-attachments/assets/beb8cadf-2e3d-4669-a5ed-eef26ccc179b)
 
